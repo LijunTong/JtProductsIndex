@@ -1,0 +1,76 @@
+---
+import type { Feature } from '../data/products'
+
+interface Props {
+  features: Feature[]
+  columns?: 2 | 3
+}
+
+const { features, columns = 3 } = Astro.props
+---
+
+<ul class:list={['features', `cols-${columns}`]}>
+  {features.map((feature, index) => (
+    <li class="feature card">
+      <span class="index mono">{String(index + 1).padStart(2, '0')}</span>
+      <h3>
+        {feature.title}
+        {feature.tag && <span class="tag mono">{feature.tag}</span>}
+      </h3>
+      <p>{feature.body}</p>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .features {
+    display: grid;
+    gap: var(--space-4);
+    list-style: none;
+  }
+
+  .feature {
+    display: grid;
+    gap: var(--space-2);
+    padding: var(--space-5);
+  }
+
+  .index {
+    color: var(--accent);
+  }
+
+  h3 {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--step-1);
+  }
+
+  .tag {
+    padding: 2px 8px;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-pill);
+    color: var(--muted);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+  }
+
+  p {
+    color: var(--muted);
+    font-size: var(--step--1);
+  }
+
+  @media (min-width: 720px) {
+    .cols-2,
+    .cols-3 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 980px) {
+    .cols-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+</style>

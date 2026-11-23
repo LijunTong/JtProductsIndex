@@ -1,0 +1,343 @@
+---
+import { Image } from 'astro:assets'
+import BaseLayout from './BaseLayout.astro'
+import SectionHeading from '../components/SectionHeading.astro'
+import FeatureGrid from '../components/FeatureGrid.astro'
+import ShotGallery from '../components/ShotGallery.astro'
+import DownloadTable from '../components/DownloadTable.astro'
+import StackList from '../components/StackList.astro'
+import { withBase } from '../lib/url'
+import { products, type Product } from '../data/products'
+
+interface Props {
+  product: Product
+}
+
+const { product } = Astro.props
+const others = products.filter((p) => p.slug !== product.slug)
+const [cover, ...gallery] = product.shots
+
+const origin = Astro.site ?? new URL('https://lijuntong.github.io')
+const pageUrl = new URL(withBase(`/${product.slug}/`), origin).href
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: `${product.name}（${product.englishName}）`,
+  applicationCategory: 'ProductivityApplication',
+  operatingSystem: product.platforms.join(', '),
+  softwareVersion: product.version,
+  description: product.summary,
+  url: pageUrl,
+  downloadUrl: product.releases,
+  isAccessibleForFree: true,
+  inLanguage: 'zh-CN',
+  author: { '@type': 'Person', name: 'joont', url: 'https://github.com/LijunTong' },
+  screenshot: new URL(withBase(cover.src.src), origin).href,
+}
+---
+
+<BaseLayout
+  title={`${product.name} ${product.englishName} · JT 工具集`}
+  description={product.summary}
+  ogType="article"
+  ogImage={cover.src.src}
+  jsonLd={jsonLd}
+>
+  <section class="hero">
+    <div class="container hero-inner">
+      <div class="hero-copy">
+        <a class="back mono" href={withBase('/#products')}>← 全部产品</a>
+        <p class="eyebrow">{product.englishName} · v{product.version}</p>
+        <h1>{product.name}</h1>
+        <p class="tagline">{product.tagline}</p>
+        <p class="summary">{product.summary}</p>
+
+        <ul class="chips mono">
+          {product.platforms.map((platform) => <li>{platform}</li>)}
+          <li>v{product.version}</li>
+        </ul>
+
+        <div class="actions">
+          <a class="btn btn--primary" href={product.releases} rel="noopener" target="_blank">下载 {product.name}</a>
+          <a class="btn" href={product.repo} rel="noopener" target="_blank">源码</a>
+        </div>
+      </div>
+
+      <figure class="hero-visual">
+        <Image
+          src={cover.src}
+          alt={cover.alt}
+          widths={[640, 1024]}
+          sizes="(min-width: 900px) 46vw, 92vw"
+          loading="eager"
+          format="webp"
+          quality={84}
+        />
+        <figcaption class="mono">{cover.caption}</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="metrics">
+    <div class="container metrics-inner">
+      {product.metrics.map((metric) => (
+        <div class="metric">
+          <p class="metric-value">{metric.value}</p>
+          <p class="metric-label">{metric.label}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <SectionHeading eyebrow="功能" title="它具体能做什么" />
+      <div class="block">
+        <FeatureGrid features={product.features} />
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt">
+    <div class="container">
+      <SectionHeading eyebrow="截图" title="界面就是这样" description="点击任意一张放大查看。" />
+      <div class="block">
+        <ShotGallery shots={gallery} eagerFirst />
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <SectionHeading eyebrow="技术栈" title="由什么构成" />
+      <div class="block">
+        <StackList stack={product.stack} />
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt">
+    <div class="container">
+      <SectionHeading eyebrow="下载" title="安装与数据" />
+      <div class="block download-block">
+        <div>
+          <DownloadTable downloads={product.downloads} releases={product.releases} />
+        </div>
+        <aside class="notes">
+          <h3>运行环境</h3>
+          <ul>
+            {product.requirements.map((item) => <li>{item}</li>)}
+          </ul>
+          <h3>你的数据</h3>
+          <p>{product.dataNote}</p>
+          <p class="mono muted">源码：<a href={product.repo} rel="noopener" target="_blank">{product.repo.replace('https://', '')}</a></p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <nav class="next container" aria-label="其他产品">
+    <a href={withBase('/')}>← 回首页</a>
+    {others.map((other) => (
+      <a href={withBase(`/${other.slug}/`)}>另一个：{other.name} →</a>
+    ))}
+  </nav>
+</BaseLayout>
+
+<style>
+  .hero {
+    padding-block: var(--space-7) var(--space-8);
+    border-bottom: 1px solid var(--border);
+    background:
+      radial-gradient(55% 70% at 88% 0%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 72%),
+      var(--bg);
+  }
+
+  .hero-inner {
+    display: grid;
+    gap: var(--space-7);
+    align-items: center;
+  }
+
+  .hero-copy {
+    display: grid;
+    gap: var(--space-3);
+    justify-items: start;
+  }
+
+  .back {
+    color: var(--muted);
+  }
+
+  .back:hover {
+    color: var(--accent);
+  }
+
+  h1 {
+    font-size: var(--step-4);
+    letter-spacing: -0.03em;
+  }
+
+  .tagline {
+    max-width: 24ch;
+    font-size: var(--step-2);
+    font-weight: 600;
+    line-height: 1.35;
+    text-wrap: balance;
+  }
+
+  .summary {
+    max-width: 52ch;
+    color: var(--muted);
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-block: var(--space-2);
+    list-style: none;
+  }
+
+  .chips li {
+    padding: 3px 10px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+    color: var(--muted);
+    font-size: 0.75rem;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-2);
+  }
+
+  .hero-visual {
+    margin: 0;
+    overflow: hidden;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    background: var(--surface);
+    box-shadow: var(--shadow);
+  }
+
+  .hero-visual img {
+    width: 100%;
+  }
+
+  figcaption {
+    padding: var(--space-3) var(--space-4);
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.75rem;
+  }
+
+  .metrics {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .metrics-inner {
+    display: grid;
+    gap: var(--space-5);
+    padding-block: var(--space-6);
+  }
+
+  .metric-value {
+    font-family: var(--font-mono);
+    font-size: var(--step-3);
+    font-weight: 600;
+    color: var(--accent);
+    line-height: 1.1;
+  }
+
+  .metric-label {
+    margin-top: var(--space-1);
+    color: var(--muted);
+    font-size: var(--step--1);
+  }
+
+  .block {
+    margin-top: var(--space-6);
+  }
+
+  .section--alt {
+    background: color-mix(in srgb, var(--surface) 55%, var(--bg));
+    border-block: 1px solid var(--border);
+  }
+
+  .download-block {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  .notes {
+    display: grid;
+    gap: var(--space-2);
+    align-content: start;
+    padding: var(--space-5);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+
+  .notes h3 {
+    font-size: var(--step-0);
+    margin-top: var(--space-2);
+  }
+
+  .notes h3:first-child {
+    margin-top: 0;
+  }
+
+  .notes ul {
+    display: grid;
+    gap: 4px;
+    padding-inline-start: 18px;
+    list-style: disc;
+    color: var(--muted);
+    font-size: var(--step--1);
+  }
+
+  .notes p {
+    color: var(--muted);
+    font-size: var(--step--1);
+  }
+
+  .notes a {
+    color: var(--accent);
+  }
+
+  .next {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding-block: var(--space-6);
+    font-size: var(--step--1);
+    color: var(--muted);
+  }
+
+  .next a:hover {
+    color: var(--accent);
+  }
+
+  @media (min-width: 720px) {
+    .metrics-inner {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 900px) {
+    .hero-inner {
+      grid-template-columns: 1.02fr 0.98fr;
+      gap: var(--space-8);
+    }
+
+    .download-block {
+      grid-template-columns: 1.2fr 0.8fr;
+      align-items: start;
+    }
+  }
+</style>

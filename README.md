@@ -1,0 +1,87 @@
+# JT 工具集 · 产品站
+
+两个本地优先桌面应用的产品介绍站，纯静态、零后端，构建产物直接发布到 GitHub Pages。
+
+- 工作台（Work Station）：跨平台桌面任务 / 项目管理器
+- 几件事（Something）：Windows 桌面的天气、待办、日程、邮件聚合器
+
+站点只做三件事：讲清楚每个产品解决什么问题、给出真实截图、提供可下载的安装包。
+
+## 技术栈
+
+| 层 | 选择 | 说明 |
+| --- | --- | --- |
+| 框架 | Astro 7（`output: 'static'`） | 默认零 JS，只有主题切换、灯箱、移动菜单少量内联脚本 |
+| 样式 | 原生 CSS + 自定义属性 | `src/styles/tokens.css` 集中色彩/字号/间距，无预处理器 |
+| 图片 | `astro:assets` | 构建期转 WebP、按宽度生成 srcset，自动写 width/height 防抖 |
+| 校验 | TypeScript strict + `astro check` | 内容源 `products.ts` 带完整类型 |
+| 发布 | GitHub Actions → Pages | 无第三方托管依赖 |
+
+## 本地开发
+
+```bash
+npm install
+npm run dev        # http://localhost:4321
+npm run build      # 产出 dist/
+npm run preview    # 预览构建结果
+npm run check      # 类型 + Astro 模板检查
+npm run check:links # 构建后检查站内链接
+```
+
+Node ≥ 22。
+
+## 目录结构
+
+```text
+src/
+  data/products.ts        # 唯一内容源：文案、功能、截图、下载、技术栈
+  pages/index.astro       # 首页
+  pages/[slug].astro      # 产品页（/work-station/、/something/）
+  pages/sitemap.xml.ts    # 构建期生成 sitemap
+  pages/robots.txt.ts     # 构建期生成 robots
+  layouts/BaseLayout.astro
+  layouts/ProductLayout.astro
+  components/             # SiteHeader、ShotGallery、DownloadTable 等
+  styles/tokens.css       # 设计令牌
+  assets/shots/           # 原始截图（构建期处理，不直接进 public）
+public/                   # favicon、og.png 等原样拷贝的文件
+scripts/check-links.mjs   # 站内链接自检
+.github/workflows/deploy.yml
+```
+
+## 改内容
+
+绝大多数改动只碰 `src/data/products.ts`：
+
+- `summary` / `tagline`：首屏文案，`summary` 同时用作 meta description
+- `features`：功能卡片，`tag` 可选（如「核心」）
+- `shots`：截图数组，第一张同时是产品页 Hero 封面与分享图来源
+- `downloads`：下载表格行，`href` 指向 GitHub Release 资产
+- `stack` / `requirements` / `dataNote`：技术栈、运行环境、数据说明
+
+截图放进 `src/assets/shots/<slug>/` 再用 `import` 引入；不要放 `public/`，否则不会做尺寸优化。
+
+## 部署
+
+1. 推送到 GitHub，仓库默认分支为 `master`。
+2. 仓库 **Settings → Pages → Build and deployment → Source** 选 **GitHub Actions**。
+3. 推送即触发 `.github/workflows/deploy.yml`：安装 → `astro check` → 构建 → 链接自检 → 发布。
+
+默认发布地址为 `https://<user>.github.io/<repo>/`，因此构建时带 `BASE_PATH=/<repo>`。
+
+需要改地址时，在仓库 **Settings → Secrets and variables → Actions → Variables** 设置：
+
+| 变量 | 示例 | 作用 |
+| --- | --- | --- |
+| `SITE_URL` | `https://example.com` | canonical、OG、sitemap 的域名 |
+| `BASE_PATH` | `/` 或 `/JtProductsIndex` | 站点路径前缀，用户主页仓库填 `/` |
+
+自定义域名：先在 Pages 里绑定域名，再把 `BASE_PATH` 设为 `/`、`SITE_URL` 设为该域名。
+
+## 验收清单
+
+- [x] 390 / 768 / 1440 三档无横向滚动
+- [x] 构建产物无破图、无失效站内链接（`npm run check:links`）
+- [x] 截图经 WebP 压缩并带 srcset
+- [x] WebSite / SoftwareApplication 结构化数据、sitemap、robots
+- [ ] 仓库推送到 GitHub 后确认 Actions 首次发布成功

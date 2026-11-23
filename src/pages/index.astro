@@ -1,0 +1,362 @@
+---
+import { Image } from 'astro:assets'
+import BaseLayout from '../layouts/BaseLayout.astro'
+import SectionHeading from '../components/SectionHeading.astro'
+import { products } from '../data/products'
+import { withBase } from '../lib/url'
+
+const origin = Astro.site ?? new URL('https://lijuntong.github.io')
+const homeUrl = new URL(withBase('/'), origin)
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'JT 工具集',
+  alternateName: 'JT Tools',
+  url: homeUrl.href,
+  description: '工作台与几件事：两个本地优先的桌面应用，管项目、任务、天气、日程和邮件。',
+  inLanguage: 'zh-CN',
+  hasPart: products.map((product) => ({
+    '@type': 'SoftwareApplication',
+    name: product.name,
+    applicationCategory: 'ProductivityApplication',
+    operatingSystem: product.platforms.join(', '),
+    url: new URL(withBase(`/${product.slug}/`), origin).href,
+  })),
+}
+
+const principles = [
+  {
+    title: '数据留在本机',
+    body: '待办、日程、邮件缓存写进本机的 SQLite 文件。没有云同步，也没有我们的服务器——因为根本没有服务器。',
+  },
+  {
+    title: '不需要账号',
+    body: '下载、安装、打开就能用。只有在你主动配置邮箱时，才需要填一次自己的 IMAP 信息。',
+  },
+  {
+    title: '看得见的实现',
+    body: '两个应用的源码都在 GitHub 上，安装包、版本号和更新日志都在 Release 页面，改了什么都查得到。',
+  },
+]
+---
+
+<BaseLayout
+  title="JT 工具集 · 本地优先的桌面工具"
+  description="工作台与几件事：两个跑在自己电脑上的桌面应用，管项目、任务、天气、日程和邮件，数据存在本机。"
+  jsonLd={jsonLd}
+>
+  <section class="hero">
+    <div class="container hero-inner">
+      <div class="hero-copy">
+        <p class="eyebrow">本地优先 · 桌面工具</p>
+        <h1>把每天的事，<br />收进两个桌面应用。</h1>
+        <p class="lead">
+          工作台管项目和任务，几件事管天气、待办、日程和邮件。不需要注册账号，数据写在本机。
+        </p>
+        <div class="actions">
+          <a class="btn btn--primary" href="#products">看看能做什么</a>
+          <a class="btn" href="https://github.com/LijunTong" rel="noopener" target="_blank">GitHub 主页</a>
+        </div>
+      </div>
+
+      <div class="hero-shots" aria-hidden="true">
+        {products.map((product, index) => (
+          <div class:list={['hero-shot', `hero-shot--${index + 1}`]}>
+            <Image
+              src={product.shots[0].src}
+              alt=""
+              widths={[640, 1024]}
+              sizes="(min-width: 900px) 44vw, 90vw"
+              loading="eager"
+              format="webp"
+              quality={80}
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="products" class="section">
+    <div class="container">
+      <SectionHeading
+        eyebrow="产品"
+        title="两个应用，一个共同的取舍"
+        description="都和服务器保持距离：能不联网就不联网，能存本机就存本机。"
+      />
+
+      <ul class="products">
+        {products.map((product) => (
+          <li>
+            <a class="product card" href={withBase(`/${product.slug}/`)}>
+              <span class="product-media">
+                <Image
+                  src={product.shots[0].src}
+                  alt={product.shots[0].alt}
+                  widths={[640, 1024]}
+                  sizes="(min-width: 900px) 520px, 92vw"
+                  loading="lazy"
+                  format="webp"
+                  quality={80}
+                />
+              </span>
+              <span class="product-body">
+                <span class="eyebrow">{product.englishName}</span>
+                <span class="product-name">{product.name}</span>
+                <span class="product-tagline">{product.tagline}</span>
+                <span class="product-meta mono">{product.platforms.join(' · ')} · v{product.version}</span>
+                <span class="product-more">了解详情 →</span>
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section id="principles" class="section section--alt">
+    <div class="container">
+      <SectionHeading
+        eyebrow="原则"
+        title="为什么做成桌面应用"
+        description="这些事每天都要做，不值得为了同步和登录多绕两步。"
+      />
+      <ul class="principles">
+        {principles.map((item, index) => (
+          <li class="principle">
+            <span class="mono principle-index">{String(index + 1).padStart(2, '0')}</span>
+            <h3>{item.title}</h3>
+            <p>{item.body}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container about">
+      <div>
+        <SectionHeading eyebrow="关于" title="谁在维护这两个工具" />
+        <p class="about-body">
+          一个人做的桌面工具。日常里反复出现的动作——记一件事、排今天的日程、看项目还剩多少——被做成两个应用，装上就能用。
+          更新会优先发在 GitHub 的 Release 页面。
+        </p>
+      </div>
+      <ul class="about-links">
+        <li><a href="https://github.com/LijunTong/work-station" rel="noopener" target="_blank">工作台源码 →</a></li>
+        <li><a href="https://github.com/LijunTong/Something" rel="noopener" target="_blank">几件事源码 →</a></li>
+        <li><a href="https://github.com/LijunTong" rel="noopener" target="_blank">GitHub 主页 →</a></li>
+      </ul>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    position: relative;
+    overflow: hidden;
+    padding-block: clamp(56px, 9vw, 104px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(50% 60% at 78% 8%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 70%),
+      linear-gradient(to bottom, transparent 60%, var(--bg));
+    pointer-events: none;
+  }
+
+  .hero-inner {
+    position: relative;
+    display: grid;
+    gap: var(--space-7);
+    align-items: center;
+  }
+
+  .hero-copy {
+    display: grid;
+    gap: var(--space-4);
+    justify-items: start;
+  }
+
+  h1 {
+    max-width: 18ch;
+    font-size: clamp(2rem, 3.6vw, 3.05rem);
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-2);
+  }
+
+  .hero-shots {
+    position: relative;
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .hero-shot img {
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+  }
+
+  .products {
+    display: grid;
+    gap: var(--space-5);
+    margin-top: var(--space-6);
+    list-style: none;
+  }
+
+  .product {
+    display: grid;
+    gap: 0;
+    overflow: hidden;
+    transition: border-color var(--dur) var(--ease), transform var(--dur) var(--ease);
+  }
+
+  .product:hover {
+    border-color: var(--border-strong);
+    transform: translateY(-2px);
+  }
+
+  .product-media {
+    display: block;
+    border-bottom: 1px solid var(--border);
+    background: var(--elevated);
+  }
+
+  .product-media img {
+    width: 100%;
+  }
+
+  .product-body {
+    display: grid;
+    gap: var(--space-2);
+    padding: var(--space-5);
+  }
+
+  .product-name {
+    font-size: var(--step-2);
+    font-weight: 650;
+    letter-spacing: -0.02em;
+  }
+
+  .product-tagline {
+    color: var(--muted);
+  }
+
+  .product-meta {
+    color: var(--muted);
+    font-size: 0.75rem;
+  }
+
+  .product-more {
+    margin-top: var(--space-2);
+    color: var(--accent);
+    font-size: var(--step--1);
+    font-weight: 600;
+  }
+
+  .section--alt {
+    background: color-mix(in srgb, var(--surface) 55%, var(--bg));
+    border-block: 1px solid var(--border);
+  }
+
+  .principles {
+    display: grid;
+    gap: var(--space-5);
+    margin-top: var(--space-6);
+    list-style: none;
+  }
+
+  .principle {
+    display: grid;
+    gap: var(--space-2);
+    align-content: start;
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--border-strong);
+  }
+
+  .principle-index {
+    color: var(--accent);
+  }
+
+  .principle h3 {
+    font-size: var(--step-1);
+  }
+
+  .principle p {
+    color: var(--muted);
+    font-size: var(--step--1);
+  }
+
+  .about {
+    display: grid;
+    gap: var(--space-6);
+    align-items: start;
+  }
+
+  .about-body {
+    max-width: 56ch;
+    margin-top: var(--space-4);
+    color: var(--muted);
+  }
+
+  .about-links {
+    display: grid;
+    gap: var(--space-3);
+    list-style: none;
+    font-size: var(--step--1);
+  }
+
+  .about-links a {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding-block: var(--space-3);
+    border-bottom: 1px solid var(--border);
+    color: var(--muted);
+  }
+
+  .about-links a:hover {
+    color: var(--accent);
+  }
+
+  @media (min-width: 860px) {
+    .hero-inner {
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: var(--space-8);
+    }
+
+    .hero-shots {
+      transform: rotate(-1.2deg);
+    }
+
+    .products {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .principles {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .about {
+      grid-template-columns: 1.4fr 0.6fr;
+    }
+  }
+
+  @media (max-width: 859px) {
+    .hero-shots {
+      max-width: 620px;
+    }
+  }
+</style>

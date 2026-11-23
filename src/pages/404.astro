@@ -1,0 +1,38 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import { withBase } from '../lib/url'
+---
+
+<BaseLayout title="页面不存在 · JT 工具集" description="没有找到这个页面。" noindex>
+  <section class="section">
+    <div class="container notfound">
+      <p class="mono muted">404</p>
+      <h1>这个页面不在这里</h1>
+      <p class="lead">链接可能过期了，或者地址拼写有误。</p>
+      <div class="actions">
+        <a class="btn btn--primary" href={withBase('/')}>回首页</a>
+        <a class="btn" href={withBase('/#products')}>查看产品</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .notfound {
+    display: grid;
+    gap: var(--space-4);
+    justify-items: start;
+    padding-block: var(--space-8);
+  }
+
+  h1 {
+    font-size: var(--step-3);
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-3);
+  }
+</style>

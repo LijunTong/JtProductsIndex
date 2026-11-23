@@ -1,0 +1,154 @@
+---
+import { Image, getImage } from 'astro:assets'
+import type { Shot } from '../data/products'
+
+interface Props {
+  shots: Shot[]
+  eagerFirst?: boolean
+}
+
+const { shots, eagerFirst = false } = Astro.props
+
+const items = await Promise.all(
+  shots.map(async (shot) => ({
+    ...shot,
+    large: (await getImage({ src: shot.src, width: 1600, format: 'webp', quality: 82 })).src,
+  })),
+)
+---
+
+<ul class="gallery">
+  {items.map((shot, index) => (
+    <li class:list={['shot', { 'shot--wide': index === 0 }]}>
+      <button class="shot-trigger" type="button" data-shot={shot.large} data-caption={shot.caption}>
+        <Image
+          src={shot.src}
+          alt={shot.alt}
+          widths={[640, 1024]}
+          sizes={index === 0 ? '(min-width: 980px) 960px, 92vw' : '(min-width: 980px) 470px, 92vw'}
+          loading={eagerFirst && index === 0 ? 'eager' : 'lazy'}
+          format="webp"
+          quality={82}
+        />
+        <span class="shot-caption mono">{shot.caption}</span>
+      </button>
+    </li>
+  ))}
+</ul>
+
+<dialog class="lightbox" aria-label="截图预览">
+  <button class="lightbox-close" type="button" aria-label="关闭预览">×</button>
+  <img alt="" />
+  <p class="lightbox-caption mono"></p>
+</dialog>
+
+<script is:inline>
+  ;(() => {
+    const dialog = document.querySelector('.lightbox')
+    if (!dialog) return
+    const img = dialog.querySelector('img')
+    const caption = dialog.querySelector('.lightbox-caption')
+
+    document.querySelectorAll('[data-shot]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        img.src = btn.dataset.shot
+        img.alt = btn.querySelector('img')?.alt ?? ''
+        caption.textContent = btn.dataset.caption ?? ''
+        dialog.showModal()
+      })
+    })
+
+    dialog.querySelector('.lightbox-close').addEventListener('click', () => dialog.close())
+    dialog.addEventListener('click', (event) => {
+      if (event.target === dialog) dialog.close()
+    })
+  })()
+</script>
+
+<style>
+  .gallery {
+    display: grid;
+    gap: var(--space-4);
+    list-style: none;
+  }
+
+  .shot-trigger {
+    display: grid;
+    gap: var(--space-3);
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-align: start;
+    cursor: zoom-in;
+  }
+
+  .shot-trigger img {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+
+  .shot-caption {
+    color: var(--muted);
+  }
+
+  @media (min-width: 720px) {
+    .gallery {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .shot--wide {
+      grid-column: 1 / -1;
+    }
+  }
+
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    width: min(1200px, calc(100vw - 32px));
+    max-height: calc(100vh - 32px);
+    padding: var(--space-3);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    background: var(--surface);
+    color: var(--text);
+    box-shadow: var(--shadow);
+  }
+
+  .lightbox::backdrop {
+    background: rgba(3, 7, 12, 0.78);
+    backdrop-filter: blur(2px);
+  }
+
+  .lightbox img {
+    width: 100%;
+    max-height: calc(100vh - 120px);
+    object-fit: contain;
+  }
+
+  .lightbox-caption {
+    margin-top: var(--space-2);
+    color: var(--muted);
+  }
+
+  .lightbox-close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 1;
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+    background: var(--bg);
+    color: var(--text);
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+  }
+</style>

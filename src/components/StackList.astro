@@ -1,0 +1,50 @@
+---
+interface Props {
+  stack: { label: string; items: string[] }[]
+}
+
+const { stack } = Astro.props
+---
+
+<ul class="stack">
+  {stack.map((group) => (
+    <li>
+      <p class="eyebrow">{group.label}</p>
+      <ul class="items">
+        {group.items.map((item) => (
+          <li>{item}</li>
+        ))}
+      </ul>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .stack {
+    display: grid;
+    gap: var(--space-5);
+    list-style: none;
+  }
+
+  .items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: var(--space-2);
+    list-style: none;
+  }
+
+  .items li {
+    padding: 4px 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+    background: var(--surface);
+    font-size: var(--step--1);
+  }
+
+  @media (min-width: 720px) {
+    .stack {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+</style>

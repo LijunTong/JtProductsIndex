@@ -1,0 +1,98 @@
+---
+import { withBase } from '../lib/url'
+const year = new Date().getFullYear()
+---
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <span class="brand-mark" aria-hidden="true">JT</span>
+      <div>
+        <p class="footer-name">JT 工具集</p>
+        <p class="footer-note">本地优先的桌面工具，数据留在你自己的机器上。</p>
+      </div>
+    </div>
+
+    <nav class="footer-links" aria-label="页脚导航">
+      <a href={withBase('/#products')}>产品</a>
+      <a href="https://github.com/LijunTong/work-station" rel="noopener" target="_blank">工作台源码</a>
+      <a href="https://github.com/LijunTong/Something" rel="noopener" target="_blank">几件事源码</a>
+      <a href="https://github.com/LijunTong" rel="noopener" target="_blank">GitHub</a>
+    </nav>
+
+    <p class="footer-meta">© {year} joont · 构建于 Astro · 无账户、无追踪</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--border);
+    padding-block: var(--space-7);
+  }
+
+  .footer-inner {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .footer-brand {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+  }
+
+  .brand-mark {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 9px;
+    background: var(--text);
+    color: var(--bg);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 700;
+    flex: none;
+  }
+
+  .footer-name {
+    font-weight: 650;
+  }
+
+  .footer-note {
+    color: var(--muted);
+    font-size: var(--step--1);
+  }
+
+  .footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-5);
+    font-size: var(--step--1);
+  }
+
+  .footer-links a {
+    color: var(--muted);
+  }
+
+  .footer-links a:hover {
+    color: var(--text);
+  }
+
+  .footer-meta {
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+  }
+
+  @media (min-width: 860px) {
+    .footer-inner {
+      grid-template-columns: 1.2fr 1fr;
+      align-items: start;
+    }
+
+    .footer-meta {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

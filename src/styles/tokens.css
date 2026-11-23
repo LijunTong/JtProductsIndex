@@ -1,0 +1,65 @@
+:root {
+  color-scheme: dark;
+
+  --bg: #0b1015;
+  --surface: #121821;
+  --elevated: #172231;
+  --text: #e8edf4;
+  --muted: #93a1b3;
+  --accent: #34d399;
+  --accent-strong: #10b981;
+  --on-accent: #04110b;
+  --border: rgba(255, 255, 255, 0.1);
+  --border-strong: rgba(255, 255, 255, 0.18);
+  --shadow: 0 24px 60px -28px rgba(0, 0, 0, 0.75);
+
+  --font-sans: system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", "PingFang SC", sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", "Cascadia Mono", Menlo, Consolas, monospace;
+
+  --step--1: 0.875rem;
+  --step-0: 1.0625rem;
+  --step-1: 1.25rem;
+  --step-2: clamp(1.5rem, 2.2vw, 1.875rem);
+  --step-3: clamp(1.875rem, 3vw, 2.5rem);
+  --step-4: clamp(2.4rem, 5vw, 4rem);
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+
+  --container: 1120px;
+  --gutter: clamp(18px, 4vw, 24px);
+  --section: clamp(64px, 8vw, 120px);
+
+  --radius: 14px;
+  --radius-sm: 10px;
+  --radius-pill: 999px;
+
+  --ease: cubic-bezier(0.2, 0.7, 0.3, 1);
+  --dur-fast: 150ms;
+  --dur: 240ms;
+
+  --header-h: 64px;
+}
+
+[data-theme='light'] {
+  color-scheme: light;
+
+  --bg: #f6f7f9;
+  --surface: #ffffff;
+  --elevated: #ffffff;
+  --text: #0e1520;
+  --muted: #566274;
+  --accent: #0b8a4b;
+  --accent-strong: #08703d;
+  --on-accent: #ffffff;
+  --border: #d8dee6;
+  --border-strong: #bfc8d3;
+  --shadow: 0 24px 60px -30px rgba(14, 21, 32, 0.22);
+}
