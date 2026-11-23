@@ -63,10 +63,10 @@ scripts/check-links.mjs   # 站内链接自检
 
 ## 部署
 
-1. 推送到 GitHub，仓库默认分支为 `master`。
+1. 推送到 GitHub，仓库默认分支为 `main`。
 2. 首次推送会触发 `.github/workflows/deploy.yml`：安装 → `astro check` → 构建 → 链接自检 → 把 `dist/` 强推到 `gh-pages` 分支。等这次运行变绿（`gh-pages` 分支才会出现）。
 3. 仓库 **Settings → Pages → Build and deployment → Source** 选 **Deploy from a branch**，分支选 `gh-pages`、目录 `/ (root)`，保存。
-4. 之后每次 push 到 `master`，工作流都会重建并覆盖 `gh-pages`，Pages 自动生效。
+4. 之后每次 push 到 `main`，工作流都会重建并覆盖 `gh-pages`，Pages 自动生效。
 
 `public/.nojekyll` 会被一起发布，否则 GitHub 的 Jekyll 会忽略 `_astro/` 这类下划线目录，样式和图片全部 404。
 
