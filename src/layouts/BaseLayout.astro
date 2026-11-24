@@ -28,7 +28,7 @@ const ogImageUrl = new URL(ogImage ?? `${base}og.png`, Astro.site)
 ---
 
 <!doctype html>
-<html lang="zh-CN" data-theme="dark">
+<html lang="zh-CN" data-theme="light">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -37,8 +37,8 @@ const ogImageUrl = new URL(ogImage ?? `${base}og.png`, Astro.site)
     <link rel="canonical" href={canonical} />
     {noindex && <meta name="robots" content="noindex" />}
     <link rel="icon" href={`${base}favicon.svg`} type="image/svg+xml" />
-    <meta name="theme-color" content="#0B1015" />
-    <meta name="color-scheme" content="dark light" />
+    <meta name="theme-color" content="#F6F4EF" />
+    <meta name="color-scheme" content="light dark" />
 
     <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content="JT 工具集" />
@@ -59,13 +59,12 @@ const ogImageUrl = new URL(ogImage ?? `${base}og.png`, Astro.site)
       ;(() => {
         try {
           const stored = localStorage.getItem('theme')
-          const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches
-          const theme = stored === 'light' || stored === 'dark' ? stored : prefersLight ? 'light' : 'dark'
+          const theme = stored === 'light' || stored === 'dark' ? stored : 'light'
           const root = document.documentElement
           root.dataset.theme = theme
           root.style.colorScheme = theme
           const meta = document.querySelector('meta[name="theme-color"]')
-          if (meta) meta.setAttribute('content', theme === 'light' ? '#F6F7F9' : '#0B1015')
+          if (meta) meta.setAttribute('content', theme === 'light' ? '#F6F4EF' : '#121110')
         } catch {}
       })()
     </script>

@@ -12,7 +12,7 @@ const { downloads, releases } = Astro.props
 <ul class="downloads">
   {downloads.map((item) => (
     <li class="download">
-      <div>
+      <div class="download-info">
         <p class="download-label">{item.label}</p>
         <p class="download-note mono">{item.note}</p>
       </div>
@@ -28,8 +28,8 @@ const { downloads, releases } = Astro.props
 <style>
   .downloads {
     display: grid;
-    list-style: none;
     border-top: 1px solid var(--border);
+    list-style: none;
   }
 
   .download {
@@ -37,26 +37,42 @@ const { downloads, releases } = Astro.props
     align-items: center;
     justify-content: space-between;
     gap: var(--space-4);
-    padding-block: var(--space-4);
+    padding-block: 16px;
     border-bottom: 1px solid var(--border);
   }
 
+  .download-info {
+    display: grid;
+    gap: 3px;
+  }
+
   .download-label {
-    font-weight: 600;
+    font-size: 0.9375rem;
+    font-weight: 560;
   }
 
   .download-note {
-    color: var(--muted);
-    font-size: 0.8rem;
+    color: var(--faint);
+    font-size: 0.6875rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .download .btn {
+    min-height: 38px;
+    padding-inline: 16px;
+    font-size: 0.875rem;
   }
 
   .download-all {
-    margin-top: var(--space-4);
-    font-size: var(--step--1);
+    margin-top: 18px;
+    color: var(--muted);
+    font-size: 0.875rem;
   }
 
   .download-all a {
-    color: var(--muted);
+    border-bottom: 1px solid var(--border-strong);
+    padding-bottom: 2px;
   }
 
   .download-all a:hover {

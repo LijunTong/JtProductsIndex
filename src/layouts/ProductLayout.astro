@@ -51,43 +51,38 @@ const jsonLd = {
         <h1>{product.name}</h1>
         <p class="tagline">{product.tagline}</p>
         <p class="summary">{product.summary}</p>
-
-        <ul class="chips mono">
-          {product.platforms.map((platform) => <li>{platform}</li>)}
-          <li>v{product.version}</li>
-        </ul>
-
+        <p class="hero-meta mono">{product.platforms.join(' · ')} · v{product.version}</p>
         <div class="actions">
           <a class="btn btn--primary" href={product.releases} rel="noopener" target="_blank">下载 {product.name}</a>
-          <a class="btn" href={product.repo} rel="noopener" target="_blank">源码</a>
+          <a class="btn btn--text" href={product.repo} rel="noopener" target="_blank">源码<span aria-hidden="true">↗</span></a>
         </div>
       </div>
 
-      <figure class="hero-visual">
+      <figure class="window hero-window">
         <Image
           src={cover.src}
           alt={cover.alt}
-          widths={[640, 1024]}
-          sizes="(min-width: 900px) 46vw, 92vw"
+          widths={[640, 1024, 1440]}
+          sizes="(min-width: 960px) 560px, 92vw"
           loading="eager"
           format="webp"
           quality={84}
         />
-        <figcaption class="mono">{cover.caption}</figcaption>
+        <figcaption>{cover.caption}</figcaption>
       </figure>
     </div>
   </section>
 
-  <section class="metrics">
-    <div class="container metrics-inner">
+  <div class="facts">
+    <div class="container facts-inner">
       {product.metrics.map((metric) => (
-        <div class="metric">
-          <p class="metric-value">{metric.value}</p>
-          <p class="metric-label">{metric.label}</p>
+        <div class="fact">
+          <span class="fact-value mono">{metric.value}</span>
+          <span class="fact-label">{metric.label}</span>
         </div>
       ))}
     </div>
-  </section>
+  </div>
 
   <section class="section">
     <div class="container">
@@ -100,7 +95,7 @@ const jsonLd = {
 
   <section class="section section--alt">
     <div class="container">
-      <SectionHeading eyebrow="截图" title="界面就是这样" description="点击任意一张放大查看。" />
+      <SectionHeading eyebrow="界面" title="长这样。" description="点击任意一张放大查看。" />
       <div class="block">
         <ShotGallery shots={gallery} eagerFirst />
       </div>
@@ -108,7 +103,7 @@ const jsonLd = {
   </section>
 
   <section class="section">
-    <div class="container">
+    <div class="container stack-block">
       <SectionHeading eyebrow="技术栈" title="由什么构成" />
       <div class="block">
         <StackList stack={product.stack} />
@@ -124,13 +119,19 @@ const jsonLd = {
           <DownloadTable downloads={product.downloads} releases={product.releases} />
         </div>
         <aside class="notes">
-          <h3>运行环境</h3>
-          <ul>
-            {product.requirements.map((item) => <li>{item}</li>)}
-          </ul>
-          <h3>你的数据</h3>
-          <p>{product.dataNote}</p>
-          <p class="mono muted">源码：<a href={product.repo} rel="noopener" target="_blank">{product.repo.replace('https://', '')}</a></p>
+          <div>
+            <h3 class="eyebrow">运行环境</h3>
+            <ul>
+              {product.requirements.map((item) => <li>{item}</li>)}
+            </ul>
+          </div>
+          <div>
+            <h3 class="eyebrow">你的数据</h3>
+            <p>{product.dataNote}</p>
+          </div>
+          <p class="notes-source mono">
+            源码：<a href={product.repo} rel="noopener" target="_blank">{product.repo.replace('https://', '')}</a>
+          </p>
         </aside>
       </div>
     </div>
@@ -146,27 +147,26 @@ const jsonLd = {
 
 <style>
   .hero {
-    padding-block: var(--space-7) var(--space-8);
-    border-bottom: 1px solid var(--border);
-    background:
-      radial-gradient(55% 70% at 88% 0%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 72%),
-      var(--bg);
+    padding-block: clamp(40px, 5vw, 72px) clamp(48px, 6vw, 88px);
   }
 
   .hero-inner {
     display: grid;
-    gap: var(--space-7);
+    gap: clamp(32px, 4vw, 56px);
     align-items: center;
   }
 
   .hero-copy {
     display: grid;
-    gap: var(--space-3);
+    gap: 16px;
     justify-items: start;
   }
 
   .back {
-    color: var(--muted);
+    color: var(--faint);
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    transition: color var(--dur-fast) var(--ease);
   }
 
   .back:hover {
@@ -174,138 +174,133 @@ const jsonLd = {
   }
 
   h1 {
-    font-size: var(--step-4);
-    letter-spacing: -0.03em;
+    font-size: clamp(2.6rem, 5vw, 4rem);
+    line-height: 1.06;
+    letter-spacing: -0.028em;
   }
 
   .tagline {
-    max-width: 24ch;
-    font-size: var(--step-2);
-    font-weight: 600;
-    line-height: 1.35;
+    max-width: 22ch;
+    font-size: clamp(1.25rem, 2vw, 1.625rem);
+    font-weight: 560;
+    line-height: 1.42;
+    letter-spacing: -0.015em;
     text-wrap: balance;
   }
 
   .summary {
-    max-width: 52ch;
+    max-width: 46ch;
     color: var(--muted);
+    font-size: 0.9375rem;
+    line-height: 1.72;
   }
 
-  .chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2);
-    margin-block: var(--space-2);
-    list-style: none;
-  }
-
-  .chips li {
-    padding: 3px 10px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-pill);
-    color: var(--muted);
-    font-size: 0.75rem;
+  .hero-meta {
+    color: var(--faint);
+    font-size: 0.6875rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
   }
 
   .actions {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-3);
-    margin-top: var(--space-2);
-  }
-
-  .hero-visual {
-    margin: 0;
-    overflow: hidden;
-    border: 1px solid var(--border-strong);
-    border-radius: var(--radius);
-    background: var(--surface);
-    box-shadow: var(--shadow);
-  }
-
-  .hero-visual img {
-    width: 100%;
-  }
-
-  figcaption {
-    padding: var(--space-3) var(--space-4);
-    border-top: 1px solid var(--border);
-    color: var(--muted);
-    font-size: 0.75rem;
-  }
-
-  .metrics {
-    border-bottom: 1px solid var(--border);
-  }
-
-  .metrics-inner {
-    display: grid;
+    align-items: center;
     gap: var(--space-5);
-    padding-block: var(--space-6);
+    margin-top: 6px;
   }
 
-  .metric-value {
-    font-family: var(--font-mono);
-    font-size: var(--step-3);
-    font-weight: 600;
-    color: var(--accent);
-    line-height: 1.1;
+  .actions .btn--text span {
+    transition: transform var(--dur-fast) var(--ease);
   }
 
-  .metric-label {
-    margin-top: var(--space-1);
-    color: var(--muted);
-    font-size: var(--step--1);
+  .actions .btn--text:hover span {
+    transform: translate(2px, -2px);
   }
 
-  .block {
-    margin-top: var(--space-6);
+  .hero-window {
+    box-shadow: var(--shadow-lg);
+  }
+
+  .facts {
+    border-block: 1px solid var(--border);
+    background: var(--surface-2);
+  }
+
+  .facts-inner {
+    display: grid;
+    gap: 18px;
+    padding-block: 22px;
+  }
+
+  .fact {
+    display: grid;
+    gap: 2px;
+  }
+
+  .fact-value {
+    color: var(--text);
+    font-size: 1.25rem;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+
+  .fact-label {
+    color: var(--faint);
+    font-size: 0.8125rem;
   }
 
   .section--alt {
-    background: color-mix(in srgb, var(--surface) 55%, var(--bg));
     border-block: 1px solid var(--border);
+    background: color-mix(in srgb, var(--surface-2) 55%, var(--bg));
+  }
+
+  .block {
+    margin-top: clamp(32px, 4vw, 52px);
   }
 
   .download-block {
     display: grid;
-    gap: var(--space-6);
+    gap: clamp(32px, 4vw, 56px);
   }
 
   .notes {
     display: grid;
-    gap: var(--space-2);
+    gap: 26px;
     align-content: start;
-    padding: var(--space-5);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    background: var(--surface);
   }
 
   .notes h3 {
-    font-size: var(--step-0);
-    margin-top: var(--space-2);
-  }
-
-  .notes h3:first-child {
-    margin-top: 0;
+    margin-bottom: 8px;
   }
 
   .notes ul {
     display: grid;
     gap: 4px;
-    padding-inline-start: 18px;
-    list-style: disc;
     color: var(--muted);
-    font-size: var(--step--1);
+    font-size: 0.9063rem;
+    line-height: 1.6;
+    list-style: none;
   }
 
   .notes p {
     color: var(--muted);
-    font-size: var(--step--1);
+    font-size: 0.9063rem;
+    line-height: 1.72;
   }
 
-  .notes a {
+  .notes-source {
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    color: var(--faint);
+  }
+
+  .notes-source a {
+    color: var(--muted);
+    border-bottom: 1px solid var(--border-strong);
+  }
+
+  .notes-source a:hover {
     color: var(--accent);
   }
 
@@ -313,31 +308,30 @@ const jsonLd = {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    gap: var(--space-3);
+    gap: var(--space-4);
     padding-block: var(--space-6);
-    font-size: var(--step--1);
+    border-top: 1px solid var(--border);
     color: var(--muted);
+    font-size: 0.875rem;
   }
 
   .next a:hover {
-    color: var(--accent);
+    color: var(--text);
   }
 
-  @media (min-width: 720px) {
-    .metrics-inner {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-  }
-
-  @media (min-width: 900px) {
+  @media (min-width: 960px) {
     .hero-inner {
-      grid-template-columns: 1.02fr 0.98fr;
-      gap: var(--space-8);
+      grid-template-columns: 1fr 1.02fr;
+    }
+
+    .facts-inner {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--space-7);
+      padding-block: 26px;
     }
 
     .download-block {
-      grid-template-columns: 1.2fr 0.8fr;
-      align-items: start;
+      grid-template-columns: 1.05fr 1fr;
     }
   }
 </style>

@@ -17,23 +17,20 @@ const links = [
 
     <nav class="nav" aria-label="主导航">
       {links.map((link) => (
-        <a
-          href={link.href}
-          {...(link.external ? { rel: 'noopener', target: '_blank' } : {})}
-        >
+        <a href={link.href} {...(link.external ? { rel: 'noopener', target: '_blank' } : {})}>
           {link.label}
         </a>
       ))}
     </nav>
 
     <div class="actions">
-      <button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false" aria-label="切换浅色主题">
+      <button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false" aria-label="切换深色主题">
         <svg class="icon icon--sun" viewBox="0 0 24 24" aria-hidden="true">
-          <circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="1.6"></circle>
-          <path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.2 5.2l1.6 1.6M17.2 17.2l1.6 1.6M18.8 5.2l-1.6 1.6M6.8 17.2l-1.6 1.6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path>
+          <circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.5"></circle>
+          <path d="M12 2.8v2.1M12 19.1v2.1M2.8 12h2.1M19.1 12h2.1M5.5 5.5l1.5 1.5M17 17l1.5 1.5M18.5 5.5L17 7M7 17l-1.5 1.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
         </svg>
         <svg class="icon icon--moon" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"></path>
+          <path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"></path>
         </svg>
       </button>
 
@@ -41,10 +38,7 @@ const links = [
         <summary aria-label="打开导航菜单">菜单</summary>
         <nav aria-label="移动端导航">
           {links.map((link) => (
-            <a
-              href={link.href}
-              {...(link.external ? { rel: 'noopener', target: '_blank' } : {})}
-            >
+            <a href={link.href} {...(link.external ? { rel: 'noopener', target: '_blank' } : {})}>
               {link.label}
             </a>
           ))}
@@ -58,9 +52,10 @@ const links = [
   ;(() => {
     const root = document.documentElement
     const syncPressed = () => {
-      const isLight = root.dataset.theme === 'light'
+      const isDark = root.dataset.theme === 'dark'
       document.querySelectorAll('[data-theme-toggle]').forEach((btn) => {
-        btn.setAttribute('aria-pressed', String(isLight))
+        btn.setAttribute('aria-pressed', String(isDark))
+        btn.setAttribute('aria-label', isDark ? '切换浅色主题' : '切换深色主题')
       })
     }
     syncPressed()
@@ -74,7 +69,7 @@ const links = [
         localStorage.setItem('theme', next)
       } catch {}
       const meta = document.querySelector('meta[name="theme-color"]')
-      if (meta) meta.setAttribute('content', next === 'light' ? '#F6F7F9' : '#0B1015')
+      if (meta) meta.setAttribute('content', next === 'light' ? '#F6F4EF' : '#121110')
       syncPressed()
     })
   })()
@@ -85,15 +80,15 @@ const links = [
     position: sticky;
     top: 0;
     z-index: 30;
-    background: color-mix(in srgb, var(--bg) 92%, transparent);
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
     border-bottom: 1px solid var(--border);
-    backdrop-filter: blur(8px);
+    backdrop-filter: saturate(1.4) blur(10px);
   }
 
   .header-inner {
     display: flex;
     align-items: center;
-    gap: var(--space-5);
+    gap: var(--space-6);
     min-height: var(--header-h);
   }
 
@@ -101,32 +96,33 @@ const links = [
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    font-weight: 650;
-    letter-spacing: -0.01em;
+    font-weight: 600;
+    letter-spacing: -0.02em;
   }
 
   .brand-mark {
     display: grid;
     place-items: center;
-    width: 32px;
-    height: 32px;
-    border-radius: 9px;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
     background: var(--text);
     color: var(--bg);
     font-family: var(--font-mono);
-    font-size: 0.8rem;
-    font-weight: 700;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
   }
 
   .brand-name {
-    font-size: var(--step-0);
+    font-size: 0.9375rem;
   }
 
   .nav {
-    display: flex;
-    gap: var(--space-5);
+    display: none;
+    gap: var(--space-6);
     margin-inline-start: auto;
-    font-size: var(--step--1);
+    font-size: 0.875rem;
   }
 
   .nav a {
@@ -141,43 +137,44 @@ const links = [
   .actions {
     display: flex;
     align-items: center;
-    gap: var(--space-2);
+    gap: var(--space-3);
+    margin-inline-start: auto;
   }
 
   .theme-toggle {
     display: grid;
     place-items: center;
-    width: 40px;
-    height: 40px;
+    width: 34px;
+    height: 34px;
     padding: 0;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-pill);
+    border: 0;
+    border-radius: var(--radius-sm);
     background: transparent;
     color: var(--muted);
     cursor: pointer;
-    transition: color var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease);
+    transition: color var(--dur-fast) var(--ease), background var(--dur-fast) var(--ease);
   }
 
   .theme-toggle:hover {
     color: var(--text);
-    border-color: var(--border-strong);
+    background: var(--surface-2);
   }
 
   .icon {
-    width: 18px;
-    height: 18px;
+    width: 17px;
+    height: 17px;
   }
 
-  .icon--sun {
+  .icon--moon {
     display: none;
   }
 
-  :global([data-theme='light']) .icon--sun {
+  :global([data-theme='dark']) .icon--sun {
+    display: none;
+  }
+
+  :global([data-theme='dark']) .icon--moon {
     display: block;
-  }
-
-  :global([data-theme='light']) .icon--moon {
-    display: none;
   }
 
   .menu {
@@ -187,13 +184,13 @@ const links = [
   .menu summary {
     display: grid;
     place-items: center;
-    min-width: 56px;
-    height: 40px;
-    padding: 0 12px;
+    min-width: 44px;
+    min-height: 34px;
+    padding-inline: 10px;
     border: 1px solid var(--border);
     border-radius: var(--radius-pill);
     color: var(--muted);
-    font-size: var(--step--1);
+    font-size: 0.8125rem;
     cursor: pointer;
     list-style: none;
   }
@@ -207,41 +204,33 @@ const links = [
     right: 0;
     top: calc(100% + 8px);
     display: grid;
-    min-width: 140px;
+    min-width: 160px;
     padding: 6px;
-    background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
+    background: var(--surface);
     box-shadow: var(--shadow);
   }
 
   .menu nav a {
-    padding: 8px 12px;
+    padding: 10px 12px;
     border-radius: 6px;
-    font-size: var(--step--1);
-    color: var(--muted);
+    font-size: 0.875rem;
   }
 
   .menu nav a:hover {
-    background: var(--elevated);
-    color: var(--text);
+    background: var(--surface-2);
   }
 
-  @media (max-width: 720px) {
+  @media (min-width: 760px) {
     .nav {
-      display: none;
+      display: flex;
     }
 
     .actions {
-      margin-inline-start: auto;
+      margin-inline-start: 0;
     }
 
-    .brand-name {
-      display: none;
-    }
-  }
-
-  @media (min-width: 721px) {
     .menu {
       display: none;
     }

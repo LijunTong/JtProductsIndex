@@ -30,7 +30,7 @@ const items = await Promise.all(
           format="webp"
           quality={82}
         />
-        <span class="shot-caption mono">{shot.caption}</span>
+        <span class="shot-caption">{shot.caption}</span>
       </button>
     </li>
   ))}
@@ -74,7 +74,7 @@ const items = await Promise.all(
 
   .shot-trigger {
     display: grid;
-    gap: var(--space-3);
+    gap: 10px;
     width: 100%;
     padding: 0;
     border: 0;
@@ -86,14 +86,43 @@ const items = await Promise.all(
   }
 
   .shot-trigger img {
+    display: block;
     width: 100%;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
+    height: auto;
+    border: 1px solid var(--border-strong);
+    border-bottom: 0;
+    border-radius: var(--radius) var(--radius) 0 0;
     background: var(--surface);
+    transition: border-color var(--dur-fast) var(--ease);
+  }
+
+  .shot-trigger:hover img {
+    border-color: var(--faint);
   }
 
   .shot-caption {
-    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 14px;
+    border: 1px solid var(--border-strong);
+    border-top: 1px solid var(--border);
+    border-radius: 0 0 var(--radius) var(--radius);
+    background: var(--surface);
+    color: var(--faint);
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .shot-caption::before {
+    content: '';
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--accent);
+    opacity: 0.7;
   }
 
   @media (min-width: 720px) {
@@ -117,11 +146,11 @@ const items = await Promise.all(
     border-radius: var(--radius);
     background: var(--surface);
     color: var(--text);
-    box-shadow: var(--shadow);
+    box-shadow: var(--shadow-lg);
   }
 
   .lightbox::backdrop {
-    background: rgba(3, 7, 12, 0.78);
+    background: rgba(18, 17, 16, 0.72);
     backdrop-filter: blur(2px);
   }
 

@@ -8,13 +8,9 @@ const { stack } = Astro.props
 
 <ul class="stack">
   {stack.map((group) => (
-    <li>
-      <p class="eyebrow">{group.label}</p>
-      <ul class="items">
-        {group.items.map((item) => (
-          <li>{item}</li>
-        ))}
-      </ul>
+    <li class="stack-row">
+      <p class="label mono">{group.label}</p>
+      <p class="items">{group.items.join(' · ')}</p>
     </li>
   ))}
 </ul>
@@ -22,29 +18,35 @@ const { stack } = Astro.props
 <style>
   .stack {
     display: grid;
-    gap: var(--space-5);
+    border-top: 1px solid var(--border);
     list-style: none;
+  }
+
+  .stack-row {
+    display: grid;
+    gap: 4px;
+    padding-block: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .label {
+    color: var(--faint);
+    font-size: 0.6875rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
   }
 
   .items {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2);
-    margin-top: var(--space-2);
-    list-style: none;
-  }
-
-  .items li {
-    padding: 4px 12px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-pill);
-    background: var(--surface);
-    font-size: var(--step--1);
+    color: var(--text);
+    font-size: 0.9375rem;
+    line-height: 1.6;
   }
 
   @media (min-width: 720px) {
-    .stack {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+    .stack-row {
+      grid-template-columns: 160px minmax(0, 1fr);
+      gap: 24px;
+      align-items: baseline;
     }
   }
 </style>
