@@ -1,11 +1,12 @@
 # JT 出品 · 产品与研究索引
 
-当前收录两个本地优先桌面应用，纯静态、零后端，构建产物直接发布到 GitHub Pages。页面结构不绑定桌面端，后续可以继续加入 Web、移动端、开源库和实验项目。
+当前收录三个本地优先项目（两个桌面应用 + 一个编辑器插件），纯静态、零后端，构建产物直接发布到 GitHub Pages。页面结构不绑定桌面端，后续可以继续加入 Web、移动端、开源库和实验项目。
 
 - 工作台（Work Station）：跨平台桌面任务 / 项目管理器
 - 几件事（Something）：Windows 桌面的天气、待办、日程、邮件聚合器
+- 分支切换（Git Branch）：给 DeepSeek Harness 的分支控件插件
 
-每个项目先讲清楚解决什么问题，再给出真实截图和可直接使用的入口。桌面应用提供安装包，未来其他项目可以改为打开网页、仓库或代码示例。
+每个项目先讲清楚解决什么问题，再给出真实截图和可直接使用的入口。桌面应用提供安装包，插件给出安装命令，未来其他项目可以改为打开网页、仓库或代码示例。
 
 ## 技术栈
 
@@ -36,7 +37,7 @@ Node ≥ 22。
 src/
   data/products.ts        # 唯一内容源：文案、类型、功能、截图、下载、技术栈
   pages/index.astro       # 首页
-  pages/[slug].astro      # 产品页（/work-station/、/something/）
+  pages/[slug].astro      # 产品页（/work-station/、/something/、/git-branch-tool/）
   pages/sitemap.xml.ts    # 构建期生成 sitemap
   pages/robots.txt.ts     # 构建期生成 robots
   layouts/BaseLayout.astro
@@ -53,13 +54,13 @@ scripts/check-links.mjs   # 站内链接自检
 
 绝大多数改动只碰 `src/data/products.ts`：
 
-- `kind` / `kindLabel`：项目形态，支持 `desktop`、`web`、`mobile`、`library`、`experiment`
+- `kind` / `kindLabel`：项目形态，支持 `desktop`、`plugin`、`web`、`mobile`、`library`、`experiment`
 - `status` / `statusLabel`：项目状态，支持 `available`、`beta`、`archived`
 - `year`：项目展示年份
 - `tone`：项目色调，支持 `violet`、`teal`、`blue`、`orange`
 - `preview`：预览外壳，支持 `desktop`、`browser`、`phone`、`code`、`image`
 - `summary` / `tagline`：首屏文案，`summary` 同时用作 meta description
-- `features`：功能卡片，`tag` 可选（如「核心」）
+- `features`：功能条目，`tag` 可选（如「核心」）
 - `shots`：截图数组，第一张同时是产品页 Hero 封面与分享图来源
 - `downloads`：下载表格行，`href` 指向 GitHub Release 资产
 - `stack` / `requirements` / `dataNote`：技术栈、运行环境、数据说明
