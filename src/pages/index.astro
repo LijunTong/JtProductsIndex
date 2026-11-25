@@ -48,7 +48,7 @@ const projectCount = String(products.length).padStart(2, '0')
 
 <BaseLayout
   title="JT 出品 · 自己做、自己用的软件索引"
-  description="JT 出品的桌面应用、软件项目与实验索引。工作台和几件事，数据存在本机。"
+  description="JT 出品：工作台、几件事，以及给 DeepSeek Harness 写的 Git 分支控件。界面、功能和下载入口都在这里。"
   jsonLd={jsonLd}
 >
   <section class="index-hero" aria-labelledby="index-title">
@@ -189,6 +189,12 @@ const projectCount = String(products.length).padStart(2, '0')
           <a href={products[1].repo} rel="noopener" target="_blank">
             <span>几件事源码</span>
             <span class="mono">Something</span>
+          </a>
+        </li>
+        <li>
+          <a href={products[2].repo} rel="noopener" target="_blank">
+            <span>分支切换源码</span>
+            <span class="mono">git-branch-tool</span>
           </a>
         </li>
         <li>

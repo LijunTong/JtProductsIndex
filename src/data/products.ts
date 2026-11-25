@@ -11,6 +11,10 @@ import smTodo from '../assets/shots/something/todo.png'
 import smSchedule from '../assets/shots/something/schedule.png'
 import smMail from '../assets/shots/something/mail.png'
 import smMcp from '../assets/shots/something/mcp.png'
+import gbOverview from '../assets/shots/git-branch-tool/overview.png'
+import gbPanel from '../assets/shots/git-branch-tool/branch-panel.png'
+import gbNew from '../assets/shots/git-branch-tool/new-branch.png'
+import gbInit from '../assets/shots/git-branch-tool/init-repo.png'
 
 export type Shot = {
   src: ImageMetadata
@@ -24,7 +28,7 @@ export type Feature = {
   tag?: string
 }
 
-export type ProjectKind = 'desktop' | 'web' | 'mobile' | 'library' | 'experiment'
+export type ProjectKind = 'desktop' | 'web' | 'mobile' | 'library' | 'experiment' | 'plugin'
 export type ProjectStatus = 'available' | 'beta' | 'archived'
 export type ProjectTone = 'violet' | 'teal' | 'blue' | 'orange'
 export type PreviewType = 'desktop' | 'browser' | 'phone' | 'code' | 'image'
@@ -33,6 +37,12 @@ export type Download = {
   label: string
   note: string
   href: string
+}
+
+export type Install = {
+  note: string
+  command: string
+  steps: string[]
 }
 
 export type Product = {
@@ -51,12 +61,14 @@ export type Product = {
   platforms: string[]
   version: string
   repo: string
-  releases: string
+  releases?: string
+  cta?: { label: string; href: string }
   metrics: { value: string; label: string }[]
   features: Feature[]
   shots: Shot[]
   stack: { label: string; items: string[] }[]
   downloads: Download[]
+  install?: Install
   requirements: string[]
   dataNote: string
 }
@@ -251,6 +263,97 @@ export const products: Product[] = [
     ],
     requirements: ['Windows 10/11', '邮件功能需要你自己的 IMAP 账号（可选）'],
     dataNote: '待办、日程、邮件缓存都存在本机 SQLite；卸载时默认保留数据目录，重装后可以直接接着用。',
+  },
+  {
+    slug: 'git-branch-tool',
+    name: '分支切换',
+    englishName: 'Git Branch',
+    kind: 'plugin',
+    kindLabel: 'DSH 插件',
+    status: 'available',
+    statusLabel: '可安装',
+    year: 2026,
+    tone: 'blue',
+    preview: 'browser',
+    tagline: '在对话界面里换分支，不用切回终端。',
+    summary:
+      '给 DeepSeek Harness 写的一个分支控件。输入框旁边放着分支图标和当前分支名，点开就能看到本地与远程分支、和上游的差距，直接切换或新建；工作目录还不是仓库时，同一个面板里就能初始化。',
+    platforms: ['Windows', 'macOS', 'Linux'],
+    version: '1.0.0',
+    repo: `${GH}/git-branch-tool`,
+    cta: { label: '安装方式', href: '#install' },
+    metrics: [
+      { value: '5', label: '个可放置的位置：输入框工具栏、会话标题旁等' },
+      { value: '5', label: '个分支动作：列出、切换、新建、初始化、删除' },
+      { value: '本机', label: '所有操作调用本机 git，不走网络' },
+    ],
+    features: [
+      {
+        title: '分支控件',
+        body: '输入框工具栏里一个分支图标、当前分支名和一个状态点：绿点表示工作区干净，黄点表示有未提交改动，灰点表示正在读取或当前目录不是仓库。',
+        tag: '核心',
+      },
+      {
+        title: '切换分支',
+        body: '本地分支排在前面，远程分支收起来并带数量；顶部有筛选框，当前分支标「当前」，行尾的 ↑N ↓N 是与上游的差距。点一下即切换，控件标签立刻刷新。',
+      },
+      {
+        title: '新建分支',
+        body: '面板底部是「分支名 + 起点 + 创建并切换」，起点下拉默认当前分支，填好名字回车就创建并切过去。',
+      },
+      {
+        title: '非 Git 目录也能开始',
+        body: '工作目录还不是仓库时，控件显示「非 Git 仓库」，面板里给一个按钮，就地执行 git init，不用先开终端。',
+      },
+      {
+        title: '命令与工具',
+        body: '除了点界面，还能用 /branch list | switch | create | init 命令，或让对话里的 Agent 调用 git_branch 工具完成同样的事。',
+        tag: '进阶',
+      },
+      {
+        title: '位置随你放',
+        body: '控件可以挂在 5 个位置之一，在设置里改；偏好存在浏览器 localStorage 里，不写配置文件。',
+      },
+    ],
+    shots: [
+      {
+        src: gbOverview,
+        alt: 'DeepSeek Harness 的首页：输入框工具栏里是分支图标、当前分支 master 和一个绿色状态点。',
+        caption: '控件：当前分支就在输入框旁边',
+      },
+      {
+        src: gbPanel,
+        alt: '分支面板：顶部是筛选框，本地分支逐个列出，当前分支标「当前」，其余显示与上游的领先落后数量，底部是新建分支的输入框与起点下拉。',
+        caption: '面板：本地、远程与上游差距',
+      },
+      {
+        src: gbNew,
+        alt: '在分支面板底部填入新分支名 feature/git-ui，从 master 起点的下拉里选择起点后点「创建并切换」。',
+        caption: '新建：分支名 + 起点',
+      },
+      {
+        src: gbInit,
+        alt: '非 Git 目录下的分支面板：显示当前目录不是 Git 仓库，并给出「在此目录创建 Git 仓库」按钮。',
+        caption: '非 Git 目录：一键初始化',
+      },
+    ],
+    stack: [
+      { label: '宿主', items: ['DeepSeek Harness（Cordis 插件）'] },
+      { label: '界面', items: ['React'] },
+      { label: '实现', items: ['Node.js', '本机 git CLI'] },
+    ],
+    downloads: [],
+    install: {
+      note: '没有安装包，这是一个插件目录：由 Harness 的插件管理器链接安装。源码以 MIT 许可发布。',
+      command: 'plugin_manager action=install_bundle target=<插件目录绝对路径>',
+      steps: [
+        '把这个仓库克隆到本机任意目录',
+        '在 Harness 的插件管理器里指向该目录安装（本地目录会被链接，不需要打包）',
+        '装好后在设置 → Git 分支里挑选控件位置',
+      ],
+    },
+    requirements: ['DeepSeek Harness（需要支持 Cordis 插件的版本）', '本机已安装 git 并在 PATH 里'],
+    dataNote: '分支操作全部交给本机 git，插件只读取当前工作目录的仓库状态；没有账号，也不经过任何服务器。',
   },
 ]
 

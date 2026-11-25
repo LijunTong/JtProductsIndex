@@ -17,6 +17,9 @@ const { product } = Astro.props
 const others = products.filter((p) => p.slug !== product.slug)
 const [cover, ...gallery] = product.shots
 
+const cta = product.cta ?? { label: `下载 ${product.name}`, href: product.releases ?? product.repo }
+const ctaExternal = !cta.href.startsWith('#')
+
 const origin = Astro.site ?? new URL('https://lijuntong.github.io')
 const pageUrl = new URL(withBase(`/${product.slug}/`), origin).href
 const jsonLd = {
@@ -28,7 +31,7 @@ const jsonLd = {
   softwareVersion: product.version,
   description: product.summary,
   url: pageUrl,
-  downloadUrl: product.releases,
+  downloadUrl: product.releases ?? product.repo,
   isAccessibleForFree: true,
   inLanguage: 'zh-CN',
   author: { '@type': 'Person', name: 'joont', url: 'https://github.com/LijunTong' },
@@ -69,8 +72,13 @@ const jsonLd = {
           </p>
 
           <div class="actions">
-            <a class="btn btn--primary" href={product.releases} rel="noopener" target="_blank">
-              下载 {product.name}
+            <a
+              class="btn btn--primary"
+              href={cta.href}
+              rel={ctaExternal ? 'noopener' : undefined}
+              target={ctaExternal ? '_blank' : undefined}
+            >
+              {cta.label}
               <svg class="icon" viewBox="0 0 18 18" aria-hidden="true">
                 <path d="M9 2.5v8M6 7.8l3 3 3-3M3.5 13.5h11" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
               </svg>
@@ -126,11 +134,11 @@ const jsonLd = {
       </div>
     </section>
 
-    <section class="section">
+    <section id="install" class="section">
       <div class="container">
         <SectionHeading
           title="运行与安装"
-          description="运行环境、数据位置和下载入口都放在同一处。"
+          description="运行环境、安装方式和数据位置都放在这一处。"
         />
 
         <div class="details-grid">
@@ -140,8 +148,21 @@ const jsonLd = {
           </div>
 
           <div class="download-block">
-            <h3>下载</h3>
-            <DownloadTable downloads={product.downloads} releases={product.releases} />
+            <h3>{product.install ? '安装' : '下载'}</h3>
+
+            {product.install ? (
+              <div class="install">
+                <p class="install-note">{product.install.note}</p>
+                <pre class="install-command"><code>{product.install.command}</code></pre>
+                <ol class="install-steps">
+                  {product.install.steps.map((step) => (
+                    <li>{step}</li>
+                  ))}
+                </ol>
+              </div>
+            ) : (
+              <DownloadTable downloads={product.downloads} releases={product.releases} />
+            )}
 
             <div class="notes">
               <div>
@@ -176,7 +197,7 @@ const jsonLd = {
       </a>
       {others.map((other) => (
         <a href={withBase(`/${other.slug}/`)}>
-          另一个：{other.name}
+          接着看：{other.name}
           <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
             <path d="M4 8h8M9 5l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
@@ -229,6 +250,7 @@ const jsonLd = {
 
   .tagline {
     max-width: 28ch;
+    text-wrap: balance;
     font-size: clamp(1.2rem, 2vw, 1.5rem);
     font-weight: 650;
     line-height: 1.45;
@@ -312,6 +334,56 @@ const jsonLd = {
   .stack-block > h3,
   .download-block > h3 {
     font-size: 1.125rem;
+  }
+
+  .install {
+    display: grid;
+    gap: 14px;
+  }
+
+  .install-note {
+    max-width: 62ch;
+    color: var(--muted);
+    font-size: 0.9375rem;
+    line-height: 1.7;
+  }
+
+  .install-command {
+    padding: 13px 15px;
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    background: var(--surface-2);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: 1.6;
+    white-space: pre;
+  }
+
+  .install-steps {
+    display: grid;
+    gap: 7px;
+    counter-reset: step;
+    list-style: none;
+  }
+
+  .install-steps li {
+    display: grid;
+    grid-template-columns: 22px minmax(0, 1fr);
+    gap: 8px;
+    align-items: baseline;
+    max-width: 62ch;
+    color: var(--muted);
+    font-size: 0.875rem;
+    line-height: 1.65;
+    counter-increment: step;
+  }
+
+  .install-steps li::before {
+    content: counter(step);
+    color: var(--project-ink);
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
   }
 
   .notes {
