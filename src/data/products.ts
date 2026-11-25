@@ -24,6 +24,11 @@ export type Feature = {
   tag?: string
 }
 
+export type ProjectKind = 'desktop' | 'web' | 'mobile' | 'library' | 'experiment'
+export type ProjectStatus = 'available' | 'beta' | 'archived'
+export type ProjectTone = 'violet' | 'teal' | 'blue' | 'orange'
+export type PreviewType = 'desktop' | 'browser' | 'phone' | 'code' | 'image'
+
 export type Download = {
   label: string
   note: string
@@ -34,6 +39,13 @@ export type Product = {
   slug: string
   name: string
   englishName: string
+  kind: ProjectKind
+  kindLabel: string
+  status: ProjectStatus
+  statusLabel: string
+  year: number
+  tone: ProjectTone
+  preview: PreviewType
   tagline: string
   summary: string
   platforms: string[]
@@ -56,6 +68,13 @@ export const products: Product[] = [
     slug: 'work-station',
     name: '工作台',
     englishName: 'Work Station',
+    kind: 'desktop',
+    kindLabel: '桌面应用',
+    status: 'available',
+    statusLabel: '可下载',
+    year: 2026,
+    tone: 'violet',
+    preview: 'desktop',
     tagline: '把手上的项目和任务，放进一个能一眼看清的看板。',
     summary:
       '跨平台的桌面任务管理器。看板拖拽、仪表盘汇总、逾期提醒，全部写进本机 SQLite —— 没有注册，没有同步，没有隐藏的服务器。',
@@ -144,6 +163,13 @@ export const products: Product[] = [
     slug: 'something',
     name: '几件事',
     englishName: 'Something',
+    kind: 'desktop',
+    kindLabel: '桌面应用',
+    status: 'available',
+    statusLabel: '可下载',
+    year: 2026,
+    tone: 'teal',
+    preview: 'desktop',
     tagline: '天气、待办、日程、邮件和专注计时，装进一个窗口。',
     summary:
       'Windows 桌面上的日常面板。左侧切换天气、日程、待办、番茄钟、信息流和邮件，右侧始终是今天最该看的东西。数据落在本机 SQLite，账号只在你配置邮箱时出现。',

@@ -1,0 +1,180 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-25T17:52:18.1256821+08:00",
+  "title": "Design System: JT 出品 · 产品与研究索引",
+  "extensions": {
+    "colorMeta": {
+      "brand-blue": {
+        "role": "primary",
+        "displayName": "Workbench Blue",
+        "canonical": "#2457d6",
+        "tonalRamp": ["#0d1d46", "#122d72", "#1944b4", "#2457d6", "#5a81e8", "#8ba8ff", "#c2d0ff", "#edf2ff"]
+      },
+      "cool-ground": {
+        "role": "neutral",
+        "displayName": "Cool Ground",
+        "canonical": "#f3f5f6",
+        "tonalRamp": ["#1a1d20", "#3b4045", "#5e656d", "#828a93", "#a9b1b9", "#cdd3d8", "#e4e8eb", "#f3f5f6"]
+      },
+      "violet-project": {
+        "role": "secondary",
+        "displayName": "Work Station Violet",
+        "canonical": "#6556d9",
+        "tonalRamp": ["#211d47", "#332c71", "#4b409e", "#6556d9", "#8d82e8", "#b5aeff", "#d7d3ff", "#f1efff"]
+      },
+      "teal-project": {
+        "role": "secondary",
+        "displayName": "Something Teal",
+        "canonical": "#0e7657",
+        "tonalRamp": ["#062a20", "#084431", "#0a5a42", "#0e7657", "#32a483", "#68c8aa", "#a8e3d1", "#e4f2ec"]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Workbench Display",
+        "purpose": "Studio statement and product names."
+      },
+      "body": {
+        "displayName": "Workbench Text",
+        "purpose": "Descriptions and supporting copy."
+      },
+      "label": {
+        "displayName": "Measured Mono",
+        "purpose": "Versions, file data, platforms, and technical metadata only."
+      }
+    },
+    "shadows": [
+      {
+        "name": "preview-rest",
+        "value": "0 12px 32px -24px rgba(20, 24, 29, 0.38), 0 2px 6px rgba(20, 24, 29, 0.05)",
+        "purpose": "Resting project screenshot shells."
+      },
+      {
+        "name": "preview-focus",
+        "value": "0 28px 64px -38px rgba(20, 24, 29, 0.46), 0 3px 10px rgba(20, 24, 29, 0.06)",
+        "purpose": "Hero artifacts, hovered screenshots, menu, and lightbox."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-standard",
+        "value": "cubic-bezier(0.22, 0.61, 0.36, 1)",
+        "purpose": "Hover, focus, and state transitions."
+      }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "520px" },
+      { "name": "md", "value": "720px" },
+      { "name": "desktop-nav", "value": "760px" },
+      { "name": "studio-index", "value": "1040px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Main project and download action.",
+      "html": "<button class=\"ds-btn-primary\">打开项目 <svg viewBox=\"0 0 16 16\" width=\"17\" height=\"17\" aria-hidden=\"true\"><path d=\"M4 8h8M9 5l3 3-3 3\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path></svg></button>",
+      "css": ".ds-btn-primary { display:inline-flex; align-items:center; justify-content:center; gap:8px; min-height:44px; padding:0 17px; border:1px solid #2457d6; border-radius:6px; background:#2457d6; color:#fff; font:650 0.9375rem/1 sans-serif; cursor:pointer; transition:background 140ms cubic-bezier(.22,.61,.36,1),border-color 140ms cubic-bezier(.22,.61,.36,1),transform 140ms cubic-bezier(.22,.61,.36,1); } .ds-btn-primary:hover { background:#1944b4; border-color:#1944b4; } .ds-btn-primary:active { transform:translateY(1px); } .ds-btn-primary:focus-visible { outline:2px solid #2457d6; outline-offset:3px; }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Quiet action beside a primary button.",
+      "html": "<button class=\"ds-btn-secondary\">查看源码</button>",
+      "css": ".ds-btn-secondary { display:inline-flex; align-items:center; justify-content:center; gap:8px; min-height:44px; padding:0 17px; border:1px solid #bcc5ce; border-radius:6px; background:#fff; color:#14181d; font:650 0.9375rem/1 sans-serif; cursor:pointer; } .ds-btn-secondary:hover { border-color:#14181d; background:#e9edf0; } .ds-btn-secondary:focus-visible { outline:2px solid #2457d6; outline-offset:3px; }"
+    },
+    {
+      "name": "Status Tag",
+      "kind": "chip",
+      "refersTo": "status-tag",
+      "description": "Published or availability status.",
+      "html": "<span class=\"ds-status\">可下载</span>",
+      "css": ".ds-status { display:inline-flex; align-items:center; min-height:24px; padding:0 8px; border:1px solid #b8daca; border-radius:4px; background:#e5f2ed; color:#137a57; font:400 0.6875rem/1 monospace; white-space:nowrap; }"
+    },
+    {
+      "name": "Project Preview",
+      "kind": "card",
+      "refersTo": "project-preview",
+      "description": "Artifact shell whose chrome changes by project type.",
+      "html": "<figure class=\"ds-preview\"><div class=\"ds-preview-bar\"><span class=\"ds-preview-mark\"></span><strong>Work Station</strong><span>v1.0.2</span></div><div class=\"ds-preview-image\">Real screenshot</div><figcaption>看板：四列流转，逾期标红</figcaption></figure>",
+      "css": ".ds-preview { width:100%; margin:0; overflow:hidden; border:1px solid #bcc5ce; border-radius:8px; background:#fff; box-shadow:0 12px 32px -24px rgba(20,24,29,.38),0 2px 6px rgba(20,24,29,.05); } .ds-preview-bar { display:flex; align-items:center; gap:9px; min-height:36px; padding:0 12px; border-bottom:1px solid #d9dfe4; background:#fafbff; font:600 0.75rem/1 sans-serif; } .ds-preview-mark { width:7px; height:7px; border-radius:2px; background:#6556d9; } .ds-preview-bar span:last-child { margin-left:auto; color:#626b75; font:400 0.6875rem/1 monospace; } .ds-preview-image { min-height:160px; display:grid; place-items:center; background:#f8f7ff; color:#58616b; } figcaption { padding:10px 12px; border-top:1px solid #d9dfe4; color:#58616b; font:400 0.75rem/1.45 sans-serif; }"
+    },
+    {
+      "name": "Feature Card",
+      "kind": "card",
+      "refersTo": "feature-card",
+      "description": "Repeated functional explanation, not page scaffolding.",
+      "html": "<article class=\"ds-feature\"><h3>看板视图</h3><p>按状态横向铺开任务，拖动即可改变状态。</p></article>",
+      "css": ".ds-feature { min-height:148px; padding:20px; border:1px solid #d9dfe4; border-radius:8px; background:#fff; } .ds-feature h3 { margin:0 0 9px; color:#14181d; font:700 1rem/1.35 sans-serif; } .ds-feature p { margin:0; color:#58616b; font:400 0.9063rem/1.7 sans-serif; }"
+    },
+    {
+      "name": "Desktop Navigation",
+      "kind": "nav",
+      "description": "Compact text navigation with authored external-link arrow.",
+      "html": "<nav class=\"ds-nav\"><a href=\"#\">项目</a><a href=\"#\">原则</a><a href=\"#\">关于</a><a href=\"#\">GitHub <svg viewBox=\"0 0 16 16\" width=\"13\" height=\"13\" aria-hidden=\"true\"><path d=\"M5 11 11 5M6 5h5v5\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path></svg></a></nav>",
+      "css": ".ds-nav { display:flex; align-items:center; gap:24px; font:600 0.875rem/1 sans-serif; } .ds-nav a { display:inline-flex; align-items:center; gap:5px; min-height:36px; color:#58616b; text-decoration:none; } .ds-nav a:hover { color:#14181d; } .ds-nav a:focus-visible { outline:2px solid #2457d6; outline-offset:3px; }"
+    },
+    {
+      "name": "Screenshot Lightbox",
+      "kind": "custom",
+      "description": "Modal screenshot viewer with fit and scrollable zoom modes.",
+      "html": "<dialog class=\"ds-lightbox\" open><div class=\"ds-lightbox-toolbar\"><button>放大查看</button><button aria-label=\"关闭预览\">×</button></div><div class=\"ds-lightbox-media\">Real screenshot</div><p>看板：四列流转，逾期标红</p></dialog>",
+      "css": ".ds-lightbox { width:min(1240px,calc(100vw - 28px)); max-height:calc(100vh - 28px); padding:0; overflow:hidden; border:1px solid #bcc5ce; border-radius:8px; background:#fff; color:#14181d; } .ds-lightbox-toolbar { display:flex; justify-content:flex-end; gap:8px; padding:7px; border-bottom:1px solid #d9dfe4; } .ds-lightbox-toolbar button { min-height:44px; padding:0 14px; border:1px solid #d9dfe4; border-radius:6px; background:#fff; color:#14181d; font:650 0.8125rem/1 sans-serif; } .ds-lightbox-media { min-height:180px; max-height:calc(100vh - 150px); padding:12px; overflow:auto; display:grid; place-items:center; background:#f3f5f6; } .ds-lightbox p { margin:0; padding:10px 14px 12px; border-top:1px solid #d9dfe4; color:#58616b; font:400 0.75rem/1.4 monospace; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Product Workbench",
+    "overview": "The site is a working index, not a promotional shell. It presents a maker's real software on a cool neutral surface, then uses product-specific color only where it identifies a project. A compact studio rail establishes authorship; the project index does the actual work. The visual system deliberately replaces the previous warm-paper editorial mood. It also avoids the generic SaaS hero: no repeated eyebrow labels, no equal feature-card wall as the page structure, and no single desktop-window metaphor imposed on every future project.",
+    "keyCharacteristics": [
+      "Cool neutral ground with a saturated electric-blue brand signal.",
+      "Real project interfaces are the primary imagery and evidence.",
+      "Product type controls the preview shell; the global shell stays platform-neutral.",
+      "One-pixel rules, restrained radii, and dense but scannable metadata.",
+      "Light and dark themes use the same hierarchy and spacing."
+    ],
+    "rules": [
+      {
+        "name": "The One Lab Blue Rule",
+        "body": "The global brand blue is rare. It appears in navigation actions, focus, selection, and brand signals, not as decoration on every section.",
+        "section": "colors"
+      },
+      {
+        "name": "The Product Owns Its Accent Rule",
+        "body": "Violet, teal, blue, and orange identify projects. They may color a preview bar, a project link, and small data markers; they do not recolor the global navigation or whole page bands.",
+        "section": "colors"
+      },
+      {
+        "name": "The No Decorative Eyebrow Rule",
+        "body": "Headings carry their own hierarchy. Do not place a tracked uppercase kicker above a section heading.",
+        "section": "typography"
+      },
+      {
+        "name": "The Zero Tracking Rule",
+        "body": "Chinese headings and body copy keep letter-spacing: 0; hierarchy comes from size and weight rather than cramped negative tracking.",
+        "section": "typography"
+      },
+      {
+        "name": "The Artifact Depth Rule",
+        "body": "A screenshot may feel like a physical working window. Page sections do not float as cards and cards are never nested.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do lead with real interfaces and working artifacts.",
+      "Do keep the global shell neutral and let project type or per-project tone own the preview.",
+      "Do use 6px-8px radii, one-pixel rules, and 44px interactive targets.",
+      "Do preserve WCAG AA body-text contrast in both themes.",
+      "Do let future projects map to desktop, browser, phone, code, or image preview shells."
+    ],
+    "donts": [
+      "Don't restore the warm cream paper ground, tiny tracked mono eyebrows, or decorative editorial hairlines.",
+      "Don't force every project into a desktop window.",
+      "Don't turn the index into equal marketing cards with icon-plus-heading-plus-copy.",
+      "Don't use product accents on page-wide background bands.",
+      "Don't nest cards or use colored side borders as decoration."
+    ]
+  }
+}
