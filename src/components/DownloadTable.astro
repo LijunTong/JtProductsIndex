@@ -16,19 +16,29 @@ const { downloads, releases } = Astro.props
         <p class="download-label">{item.label}</p>
         <p class="download-note mono">{item.note}</p>
       </div>
-      <a class="btn" href={item.href} rel="noopener" target="_blank">下载</a>
+      <a class="btn download-button" href={item.href} rel="noopener" target="_blank" aria-label={`下载${item.label}`}>
+        <svg class="icon" viewBox="0 0 18 18" aria-hidden="true">
+          <path d="M9 2.5v8M6 7.8l3 3 3-3M3.5 13.5h11" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        下载
+      </a>
     </li>
   ))}
 </ul>
 
 <p class="download-all">
-  <a href={releases} rel="noopener" target="_blank">在 GitHub Releases 查看全部资产与更新日志 →</a>
+  <a href={releases} rel="noopener" target="_blank">
+    GitHub Releases 查看全部资产与更新日志
+    <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
+      <path d="M4 8h8M9 5l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+  </a>
 </p>
 
 <style>
   .downloads {
     display: grid;
-    border-top: 1px solid var(--border);
+    border-top: 1px solid var(--border-strong);
     list-style: none;
   }
 
@@ -36,46 +46,58 @@ const { downloads, releases } = Astro.props
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: var(--space-4);
-    padding-block: 16px;
+    gap: 18px;
+    padding-block: 15px;
     border-bottom: 1px solid var(--border);
   }
 
   .download-info {
     display: grid;
     gap: 3px;
+    min-width: 0;
   }
 
   .download-label {
     font-size: 0.9375rem;
-    font-weight: 560;
+    font-weight: 650;
   }
 
   .download-note {
+    overflow-wrap: anywhere;
     color: var(--faint);
     font-size: 0.6875rem;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
   }
 
-  .download .btn {
-    min-height: 38px;
-    padding-inline: 16px;
-    font-size: 0.875rem;
+  .download-button {
+    flex: none;
+    min-height: 44px;
+    padding-inline: 13px;
+    font-size: 0.8125rem;
   }
 
   .download-all {
-    margin-top: 18px;
-    color: var(--muted);
+    margin-top: 16px;
     font-size: 0.875rem;
   }
 
   .download-all a {
-    border-bottom: 1px solid var(--border-strong);
-    padding-bottom: 2px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--muted);
+    font-weight: 600;
+    text-underline-offset: 4px;
   }
 
   .download-all a:hover {
-    color: var(--accent);
+    color: var(--text);
+    text-decoration: underline;
+  }
+
+  @media (max-width: 520px) {
+    .download {
+      align-items: flex-start;
+      flex-direction: column;
+    }
   }
 </style>

@@ -37,7 +37,7 @@ const ogImageUrl = new URL(ogImage ?? `${base}og.png`, Astro.site)
     <link rel="canonical" href={canonical} />
     {noindex && <meta name="robots" content="noindex" />}
     <link rel="icon" href={`${base}favicon.svg`} type="image/svg+xml" />
-    <meta name="theme-color" content="#F6F4EF" />
+    <meta name="theme-color" content="#F3F5F6" />
     <meta name="color-scheme" content="light dark" />
 
     <meta property="og:type" content={ogType} />
@@ -64,7 +64,7 @@ const ogImageUrl = new URL(ogImage ?? `${base}og.png`, Astro.site)
           root.dataset.theme = theme
           root.style.colorScheme = theme
           const meta = document.querySelector('meta[name="theme-color"]')
-          if (meta) meta.setAttribute('content', theme === 'light' ? '#F6F4EF' : '#121110')
+          if (meta) meta.setAttribute('content', theme === 'light' ? '#F3F5F6' : '#101418')
         } catch {}
       })()
     </script>

@@ -10,13 +10,12 @@ const { features, columns = 2 } = Astro.props
 ---
 
 <ul class:list={['features', `cols-${columns}`]}>
-  {features.map((feature, index) => (
+  {features.map((feature) => (
     <li class="feature">
-      <span class="index mono">{String(index + 1).padStart(2, '0')}</span>
-      <h3>
-        {feature.title}
-        {feature.tag && <span class="tag mono">{feature.tag}</span>}
-      </h3>
+      <div class="feature-head">
+        <h3>{feature.title}</h3>
+        {feature.tag && <span class="tag">{feature.tag}</span>}
+      </div>
       <p>{feature.body}</p>
     </li>
   ))}
@@ -25,58 +24,56 @@ const { features, columns = 2 } = Astro.props
 <style>
   .features {
     display: grid;
-    align-items: stretch;
-    border-top: 1px solid var(--border);
+    gap: 12px;
     list-style: none;
   }
 
   .feature {
     display: grid;
-    gap: 6px;
-    padding-block: clamp(20px, 2.4vw, 28px);
-    border-bottom: 1px solid var(--border);
+    align-content: start;
+    gap: 9px;
+    min-height: 148px;
+    padding: 20px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+    transition:
+      border-color var(--dur-fast) var(--ease),
+      box-shadow var(--dur var(--ease));
   }
 
-  .index {
-    color: var(--faint);
-    font-size: 0.6875rem;
-    letter-spacing: 0.16em;
+  .feature:hover {
+    border-color: var(--border-strong);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .feature-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
   }
 
   h3 {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 10px;
-    font-size: 1.0625rem;
-    font-weight: 560;
-    letter-spacing: -0.01em;
-  }
-
-  .tag {
-    color: var(--faint);
-    font-size: 0.625rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
+    font-size: 1rem;
+    line-height: 1.35;
   }
 
   p {
-    max-width: 46ch;
+    max-width: 54ch;
     color: var(--muted);
     font-size: 0.9063rem;
-    line-height: 1.68;
+    line-height: 1.7;
   }
 
   @media (min-width: 720px) {
     .cols-2,
     .cols-3 {
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      grid-auto-rows: 1fr;
-      column-gap: clamp(32px, 4vw, 56px);
     }
   }
 
-  @media (min-width: 1000px) {
+  @media (min-width: 1060px) {
     .cols-3 {
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }

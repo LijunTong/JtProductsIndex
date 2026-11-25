@@ -21,24 +21,33 @@ const items = await Promise.all(
   {items.map((shot, index) => (
     <li class:list={['shot', { 'shot--wide': index === 0 }]}>
       <button class="shot-trigger" type="button" data-shot={shot.large} data-caption={shot.caption}>
-        <Image
-          src={shot.src}
-          alt={shot.alt}
-          widths={[640, 1024]}
-          sizes={index === 0 ? '(min-width: 980px) 960px, 92vw' : '(min-width: 980px) 470px, 92vw'}
-          loading={eagerFirst && index === 0 ? 'eager' : 'lazy'}
-          format="webp"
-          quality={82}
-        />
+        <span class="shot-media">
+          <Image
+            src={shot.src}
+            alt={shot.alt}
+            widths={[640, 1024]}
+            sizes={index === 0 ? '(min-width: 980px) 1160px, 94vw' : '(min-width: 980px) 570px, 94vw'}
+            loading={eagerFirst && index === 0 ? 'eager' : 'lazy'}
+            format="webp"
+            quality={82}
+          />
+        </span>
         <span class="shot-caption">{shot.caption}</span>
       </button>
     </li>
   ))}
 </ul>
 
-<dialog class="lightbox" aria-label="截图预览">
-  <button class="lightbox-close" type="button" aria-label="关闭预览">×</button>
-  <img alt="" />
+<dialog class="lightbox" aria-label="截图预览" aria-modal="true" data-zoom="false">
+  <div class="lightbox-toolbar">
+    <button class="lightbox-zoom" type="button" aria-pressed="false">放大查看</button>
+    <button class="lightbox-close" type="button" aria-label="关闭预览">
+      <svg viewBox="0 0 20 20" aria-hidden="true">
+        <path d="m5 5 10 10M15 5 5 15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+      </svg>
+    </button>
+  </div>
+  <div class="lightbox-media"></div>
   <p class="lightbox-caption mono"></p>
 </dialog>
 
@@ -46,35 +55,58 @@ const items = await Promise.all(
   ;(() => {
     const dialog = document.querySelector('.lightbox')
     if (!dialog) return
-    const img = dialog.querySelector('img')
+    const media = dialog.querySelector('.lightbox-media')
     const caption = dialog.querySelector('.lightbox-caption')
+    const close = dialog.querySelector('.lightbox-close')
+    const zoom = dialog.querySelector('.lightbox-zoom')
+    if (!media || !caption || !close || !zoom) return
+
+    const resetZoom = () => {
+      dialog.dataset.zoom = 'false'
+      zoom.setAttribute('aria-pressed', 'false')
+      zoom.textContent = '放大查看'
+      media.scrollTo(0, 0)
+    }
 
     document.querySelectorAll('[data-shot]').forEach((btn) => {
       btn.addEventListener('click', () => {
-        img.src = btn.dataset.shot
-        img.alt = btn.querySelector('img')?.alt ?? ''
+        const image = document.createElement('img')
+        image.className = 'lightbox-image'
+        image.src = btn.dataset.shot
+        image.alt = btn.querySelector('img')?.alt ?? ''
+        media.replaceChildren(image)
         caption.textContent = btn.dataset.caption ?? ''
+        resetZoom()
         dialog.showModal()
+        close.focus()
       })
     })
 
-    dialog.querySelector('.lightbox-close').addEventListener('click', () => dialog.close())
+    zoom.addEventListener('click', () => {
+      const isZoomed = dialog.dataset.zoom !== 'true'
+      dialog.dataset.zoom = String(isZoomed)
+      zoom.setAttribute('aria-pressed', String(isZoomed))
+      zoom.textContent = isZoomed ? '适应窗口' : '放大查看'
+      media.scrollTo(0, 0)
+    })
+
+    close.addEventListener('click', () => dialog.close())
     dialog.addEventListener('click', (event) => {
       if (event.target === dialog) dialog.close()
     })
+    dialog.addEventListener('close', resetZoom)
   })()
 </script>
 
 <style>
   .gallery {
     display: grid;
-    gap: var(--space-4);
+    gap: 14px;
     list-style: none;
   }
 
   .shot-trigger {
     display: grid;
-    gap: 10px;
     width: 100%;
     padding: 0;
     border: 0;
@@ -85,44 +117,36 @@ const items = await Promise.all(
     cursor: zoom-in;
   }
 
-  .shot-trigger img {
+  .shot-media {
+    display: block;
+    overflow: hidden;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    background: var(--surface);
+    transition:
+      border-color var(--dur-fast) var(--ease),
+      box-shadow var(--dur var(--ease)),
+      transform var(--dur var(--ease));
+  }
+
+  .shot-media img {
     display: block;
     width: 100%;
     height: auto;
-    border: 1px solid var(--border-strong);
-    border-bottom: 0;
-    border-radius: var(--radius) var(--radius) 0 0;
-    background: var(--surface);
-    transition: border-color var(--dur-fast) var(--ease);
   }
 
-  .shot-trigger:hover img {
-    border-color: var(--faint);
+  .shot-trigger:hover .shot-media {
+    border-color: var(--project-accent, var(--accent));
+    box-shadow: var(--shadow);
+    transform: translateY(-2px);
   }
 
   .shot-caption {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 9px 14px;
-    border: 1px solid var(--border-strong);
-    border-top: 1px solid var(--border);
-    border-radius: 0 0 var(--radius) var(--radius);
-    background: var(--surface);
-    color: var(--faint);
-    font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  .shot-caption::before {
-    content: '';
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-    background: var(--accent);
-    opacity: 0.7;
+    display: block;
+    padding-top: 9px;
+    color: var(--muted);
+    font-size: 0.75rem;
+    line-height: 1.5;
   }
 
   @media (min-width: 720px) {
@@ -139,9 +163,10 @@ const items = await Promise.all(
     position: fixed;
     inset: 0;
     z-index: 100;
-    width: min(1200px, calc(100vw - 32px));
-    max-height: calc(100vh - 32px);
-    padding: var(--space-3);
+    width: min(1240px, calc(100vw - 28px));
+    max-height: calc(100vh - 28px);
+    padding: 0;
+    overflow: hidden;
     border: 1px solid var(--border-strong);
     border-radius: var(--radius);
     background: var(--surface);
@@ -150,34 +175,87 @@ const items = await Promise.all(
   }
 
   .lightbox::backdrop {
-    background: rgba(18, 17, 16, 0.72);
-    backdrop-filter: blur(2px);
+    background: rgba(8, 12, 16, 0.78);
   }
 
-  .lightbox img {
+  .lightbox-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    padding: 7px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  .lightbox-zoom {
+    min-height: 44px;
+    padding: 0 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    color: var(--text);
+    font: inherit;
+    font-size: 0.8125rem;
+    font-weight: 650;
+    cursor: pointer;
+  }
+
+  .lightbox-zoom:hover {
+    border-color: var(--border-strong);
+    background: var(--surface-2);
+  }
+
+  .lightbox-zoom[aria-pressed='true'] {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .lightbox-media {
+    max-height: calc(100vh - 150px);
+    padding: 12px;
+    overflow: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .lightbox-media :global(.lightbox-image) {
+    display: block;
     width: 100%;
-    max-height: calc(100vh - 120px);
+    max-height: calc(100vh - 180px);
     object-fit: contain;
   }
 
   .lightbox-caption {
-    margin-top: var(--space-2);
+    margin: 0;
+    padding: 10px 14px 12px;
+    border-top: 1px solid var(--border);
     color: var(--muted);
+    font-size: 0.75rem;
   }
 
   .lightbox-close {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    z-index: 1;
-    width: 36px;
-    height: 36px;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
     border: 1px solid var(--border);
-    border-radius: var(--radius-pill);
-    background: var(--bg);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
     color: var(--text);
-    font-size: 20px;
-    line-height: 1;
     cursor: pointer;
+  }
+
+  .lightbox-close svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .lightbox[data-zoom='true'] .lightbox-media :global(.lightbox-image) {
+    width: max(100%, 980px);
+    max-width: none;
+    max-height: none;
+    height: auto;
   }
 </style>

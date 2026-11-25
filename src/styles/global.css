@@ -7,7 +7,8 @@
 html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
-  scroll-padding-top: calc(var(--header-h) + 16px);
+  scroll-padding-top: calc(var(--header-h) + 20px);
+  scrollbar-color: var(--border-strong) var(--surface-2);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -18,14 +19,35 @@ html {
 
 body {
   margin: 0;
+  overflow-x: clip;
   background: var(--bg);
   color: var(--text);
   font-family: var(--font-sans);
   font-size: var(--step-0);
-  line-height: 1.7;
-  font-feature-settings: "kern" 1, "liga" 1;
+  line-height: 1.65;
+  font-feature-settings: "kern" 1, "liga" 1, "tnum" 1;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+::-webkit-scrollbar {
+  width: 11px;
+  height: 11px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--surface-2);
+}
+
+::-webkit-scrollbar-thumb {
+  border: 3px solid var(--surface-2);
+  border-radius: var(--radius-pill);
+  background: var(--border-strong);
 }
 
 img,
@@ -52,14 +74,11 @@ h2,
 h3,
 h4 {
   margin: 0;
-  font-weight: 600;
-  line-height: 1.12;
-  letter-spacing: -0.035em;
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.14;
+  letter-spacing: 0;
   text-wrap: balance;
-}
-
-h1 {
-  font-weight: 620;
 }
 
 ul,
@@ -68,20 +87,23 @@ ol {
   padding: 0;
 }
 
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
 :focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
   border-radius: 3px;
 }
 
-::selection {
-  background: var(--accent);
-  color: var(--on-accent);
-}
-
 .container {
   width: 100%;
   max-width: var(--container);
+  min-width: 0;
   margin-inline: auto;
   padding-inline: var(--gutter);
 }
@@ -90,9 +112,9 @@ ol {
   padding-block: var(--section);
 }
 
-.section--alt {
-  background: var(--surface-2);
+.section--muted {
   border-block: 1px solid var(--border);
+  background: var(--surface-2);
 }
 
 .skip-link {
@@ -101,6 +123,7 @@ ol {
   top: -80px;
   z-index: 50;
   padding: 10px 16px;
+  border: 1px solid var(--text);
   border-radius: var(--radius-sm);
   background: var(--text);
   color: var(--bg);
@@ -111,31 +134,11 @@ ol {
   top: 12px;
 }
 
-.eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  font-weight: 500;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--faint);
-}
-
-.eyebrow::before {
-  content: '';
-  width: 22px;
-  height: 1px;
-  background: currentColor;
-  opacity: 0.6;
-}
-
 .lead {
-  max-width: 44ch;
+  max-width: 62ch;
   color: var(--muted);
   font-size: var(--step-1);
-  line-height: 1.72;
+  line-height: 1.7;
 }
 
 .muted {
@@ -145,7 +148,7 @@ ol {
 .mono {
   font-family: var(--font-mono);
   font-size: var(--step--1);
-  letter-spacing: 0.01em;
+  letter-spacing: 0;
 }
 
 .btn {
@@ -153,82 +156,110 @@ ol {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  min-height: 46px;
-  padding: 0 22px;
+  min-height: 44px;
+  padding: 0 17px;
   border: 1px solid var(--border-strong);
-  border-radius: var(--radius-pill);
-  background: transparent;
+  border-radius: var(--radius-sm);
+  background: var(--surface);
   color: var(--text);
-  font: inherit;
   font-size: 0.9375rem;
-  font-weight: 560;
+  font-weight: 650;
+  line-height: 1;
   cursor: pointer;
-  transition: background var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease),
-    color var(--dur-fast) var(--ease), transform var(--dur-fast) var(--ease);
+  transition:
+    background var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease),
+    transform var(--dur-fast) var(--ease);
 }
 
 .btn:hover {
   border-color: var(--text);
+  background: var(--surface-2);
+}
+
+.btn:active {
+  transform: translateY(1px);
 }
 
 .btn--primary {
-  background: var(--accent);
   border-color: var(--accent);
+  background: var(--accent);
   color: var(--on-accent);
 }
 
 .btn--primary:hover {
-  background: var(--accent-strong);
   border-color: var(--accent-strong);
+  background: var(--accent-strong);
+  color: var(--on-accent);
 }
 
-.btn--text {
-  min-height: 46px;
-  padding: 0 4px;
-  border: 0;
-  border-bottom: 1px solid var(--border-strong);
-  border-radius: 0;
+.btn--quiet {
+  border-color: transparent;
+  background: transparent;
+  color: var(--muted);
+}
+
+.btn--quiet:hover {
+  border-color: var(--border);
+  background: var(--surface);
   color: var(--text);
 }
 
-.btn--text:hover {
-  border-bottom-color: var(--accent);
-  color: var(--accent);
+.btn--icon {
+  width: 44px;
+  padding: 0;
 }
 
-.card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-}
-
-/* 窗口：应用截图统一的外壳 */
-.window {
-  margin: 0;
-  overflow: hidden;
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius);
-  background: var(--surface);
-  box-shadow: var(--shadow);
-}
-
-.window img {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
-.window figcaption {
-  display: flex;
+.text-link {
+  display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px 14px;
-  border-top: 1px solid var(--border);
-  color: var(--faint);
+  gap: 7px;
+  min-height: 36px;
+  color: var(--muted);
+  font-weight: 600;
+  text-underline-offset: 4px;
+  transition: color var(--dur-fast) var(--ease);
+}
+
+.text-link:hover {
+  color: var(--project-accent, var(--accent));
+  text-decoration: underline;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 0 8px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--muted);
   font-family: var(--font-mono);
   font-size: 0.6875rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.tag--status {
+  border-color: color-mix(in srgb, var(--success) 30%, var(--border));
+  background: color-mix(in srgb, var(--success) 9%, var(--surface));
+  color: var(--success);
+}
+
+.project-accent {
+  color: var(--project-accent);
+}
+
+.project-soft {
+  background: var(--project-soft);
+}
+
+.icon {
+  width: 17px;
+  height: 17px;
+  flex: none;
 }
 
 @media (prefers-reduced-motion: reduce) {

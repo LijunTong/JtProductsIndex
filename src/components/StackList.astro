@@ -9,7 +9,7 @@ const { stack } = Astro.props
 <ul class="stack">
   {stack.map((group) => (
     <li class="stack-row">
-      <p class="label mono">{group.label}</p>
+      <p class="label">{group.label}</p>
       <p class="items">{group.items.join(' · ')}</p>
     </li>
   ))}
@@ -18,33 +18,31 @@ const { stack } = Astro.props
 <style>
   .stack {
     display: grid;
-    border-top: 1px solid var(--border);
+    border-top: 1px solid var(--border-strong);
     list-style: none;
   }
 
   .stack-row {
     display: grid;
     gap: 4px;
-    padding-block: 16px;
+    padding-block: 14px;
     border-bottom: 1px solid var(--border);
   }
 
   .label {
     color: var(--faint);
-    font-size: 0.6875rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
+    font-size: 0.75rem;
   }
 
   .items {
-    color: var(--text);
     font-size: 0.9375rem;
-    line-height: 1.6;
+    font-weight: 600;
+    line-height: 1.55;
   }
 
   @media (min-width: 720px) {
     .stack-row {
-      grid-template-columns: 160px minmax(0, 1fr);
+      grid-template-columns: 150px minmax(0, 1fr);
       gap: 24px;
       align-items: baseline;
     }
