@@ -1,0 +1,121 @@
+# 终端档（Terminal）界面方案
+
+> 选定方向：04 · C · TERMINAL。库来源 `terminal-cli-mobile`（去霓虹改造）。取代现有蓝色 SaaS 版。
+> 效果图：`.impeccable/mocks/proof/shots/term-*.png`；可交互源：`.impeccable/mocks/terminal/*.html`（`home.html` / `product.html` / `plugin.html` / `t.css`）。
+
+## 一、为什么是这个方向
+
+站点的用户是「会自己去 Release 页拿 exe、会手动 `install_bundle` 的人」。终端世界不是装饰，是这个人群每天都在看的界面语言：等宽字、行号、命令和输出、`[ok]` 收尾。它让「三件本地优先的软件」这件事一眼成立，也让「没有账号、没有服务器」这种承诺有了视觉证据——命令本身就是证据。
+
+同时否掉了三种滑坡：
+
+- 不做霓虹赛博（`cyberpunk-ui`）：发光、扫描线、品红青绿会在中文长文上崩掉可读性，且是 AI 生成的典型痕迹。
+- 不做整屏等宽正文：中文在等宽字体里没有对应字重，大段正文会退化成系统黑体。所以**标题用 Archivo**（无衬线、几何、字距收紧），**正文与元数据用等宽**，正文块行宽 ≤ 56ch。
+- 不做「假终端」：没有滚动字幕、没有打字机动画、没有伪造的 `$ sudo`。命令行的部分是**真实可复制的命令**（`plugin_manager action=install_bundle target=…`），其余是克制的表格。
+
+## 二、五条世界规则
+
+1. **一条命令开头，一条 `[ok]` 收尾。** 首页首屏是 `$ ls -1 --long`，页脚是 `[ok] 3 项 · 16 张截图`。中间的每个区块都有命令名的标题（`下载`、`功能`、`截图`、`事实`）。
+2. **绿只给状态，琥珀只给标识。** `● 可下载 / 可安装`、下载按钮、命令提示符是绿；序号 `01/02/03`、文件名、命令参数是琥珀。除此之外全灰阶，绝不用绿做装饰性下划线或标题。
+3. **表格优先于卡片。** 列表用 `grid` 三到五列（idx / name / kind / ver / state），行 hover 只改背景色，不做阴影和位移动画。
+4. **截图是证据，不给它加戏。** 截图放在 `1px` 暗框里，下挂一行 `文件名 — 说明 · 尺寸` 的元数据条，和 `ls -1 --long` 的输出格式一致。
+5. **深色是本色，浅色是「纸终端」。** 两套不是反相了事：浅色把绿换成 `#1a7f37`、琥珀换成 `#8a5e00`（见对比度表），面板底色 `#fdfdfa`、页面 `#f6f6f2`，保持「打印出来的终端输出」的观感。
+
+## 三、令牌
+
+| 语义 | 深色（默认） | 浅色 `[data-theme="light"]` | 用途 |
+|---|---|---|---|
+| `--bg` | `#08090a` | `#f6f6f2` | 页面底 |
+| `--panel` | `#0d0f10` | `#fdfdfa` | 表格、面板、截图框 |
+| `--panel-2` | `#111615` | `#eeeeea` | 行 hover |
+| `--fg` | `#d8dbd2` | `#202422` | 正文 |
+| `--bright` | `#f3f5ee` | `#0f1412` | 标题 |
+| `--dim` | `#7c8478` | `#6a716d` | 说明、元数据 |
+| `--dim-2` | `#5b6260` | `#8b928d` | 分隔符、次要符号 |
+| `--green` | `#7ee787` | `#1a7f37` | 状态、命令、下载 |
+| `--green-ink` | `#0b1a0f` | `#ffffff` | 绿色按钮上的字 |
+| `--amber` | `#e3b341` | `#8a5e00` | 序号、文件名、参数 |
+| `--red` | `#ff7b72` | `#b3261e` | 逾期/删除等破坏性提示 |
+| `--rule` | `#232823` | `#dcdcd4` | 主分隔线、面板边 |
+| `--rule-soft` | `#191d1a` | `#e8e8e1` | 行间分隔 |
+
+字体：`--mono: "JetBrains Mono", ui-monospace, "Cascadia Mono", "Microsoft YaHei", monospace`；`--sans: "Archivo", "Helvetica Neue", "PingFang SC", "Microsoft YaHei", sans-serif`。中文没有等宽字形，落到系统的 `Microsoft YaHei` / `PingFang SC`，这是刻意的取舍：中文可读性优先于「像终端」。
+
+## 四、排版与尺度
+
+- h1：`clamp(40px, 6.4vw, 86px)`，`line-height 1.02`，`letter-spacing -0.045em`，Archivo 700，中文标题里最多一个 `<em>` 变量（绿色）。
+- 区块标题 `h2.block`：11.5px 等宽、`letter-spacing .14em`、`--dim`，右侧一条 1px 线拉到边上。
+- 正文 `.sub`：13.5px / 1.85，`max-width 56ch`。
+- 表格行：10px 大写表头 + 12–13px 行内容，`padding 10px 14px`。
+- 大数字（量级）：`clamp(26px, 3vw, 34px)` Archivo 700，`-0.03em`。
+- 间距节奏：区块之间 `38px` 上边距、面板内 `14–16px`、页面左右 `clamp(20px, 4.4vw, 64px)`。
+
+## 五、组件清单（对应现有 Astro 组件）
+
+| 效果图里的东西 | 组件 | 说明 |
+|---|---|---|
+| 顶栏 `jt@local:~$` + 导航 + `theme: dark` + 版本 | `SiteHeader.astro` | 主题按钮是 `<button>`，写 `localStorage.jt-theme`，与现有 `[data-theme]` 机制一致 |
+| 首页索引表 | `index.astro`（新 `.panel`） | 五列 `idx/name/kind/ver/state`，行是 `<a>`，整行可点 |
+| 截图 + 元数据条 | `ProjectPreview.astro` / `ShotGallery.astro` | 1px 框 + `文件名 — 说明 · 尺寸` 条 |
+| 三条要点 `# 数据在本机` | `FeatureGrid.astro` | 改成三格收边面板，`#` 前缀由 CSS 伪元素生成 |
+| 下载表 | `DownloadTable.astro` | `文件名+副标题 / 大小 / ↓ 下载`，首行主按钮实心绿 |
+| 安装命令块 | `DownloadTable.astro`（plugin 分支） | `$ plugin_manager action=install_bundle target=<路径>` + 三步骤 |
+| 量级数字 | 新 `.specs` | 3 格，数字 + 一句说明 |
+| 功能清单 | `FeatureGrid.astro` | 两栏，`+` 标记，行间下边框 |
+| 事实三栏 | 新 `.facts` | 运行要求 / 数据放在哪 / 技术栈或许可证 |
+| 页脚 | `SiteFooter.astro` | `[ok] …` 左，版权右 |
+
+## 六、状态与交互
+
+- 行 hover：`background: var(--panel-2)`，`transition: background .12s linear`（不做位移、不做阴影）。
+- 按钮：默认描边绿、hover 反色填充；主按钮实心绿、hover 变描边。焦点 `outline: 2px solid var(--green); outline-offset: 2px`。
+- 主题按钮：点击切换 `data-theme` 并写 `localStorage`，文案更新为 `theme: light/dark`。
+- 光标：首屏提示行末尾一个 `steps(1)` 闪烁方块，`prefers-reduced-motion: reduce` 下静止常亮。
+- 空状态/加载态：截图未加载时面板保留边框与元数据条（避免跳动）；下载表加载态用同宽骨架行。
+
+## 七、对比度实测（WCAG 2.1，脚本计算）
+
+| 组合 | 比值 | 结论 |
+|---|---|---|
+| `#d8dbd2` on `#08090a` 正文 | 14.22 | AAA |
+| `#f3f5ee` on `#08090a` 标题 | 18.13 | AAA |
+| `#7c8478` on `#08090a` 次要 | 5.15 | AA |
+| `#7c8478` on `#0d0f10` 面板内次要 | 4.97 | AA |
+| `#7ee787` on `#08090a` 绿状态 | 12.97 | AAA |
+| `#e3b341` on `#0d0f10` 琥珀 | 9.87 | AAA |
+| `#0b1a0f` on `#7ee787` 绿按钮字 | 11.69 | AAA |
+| `#202422` on `#f6f6f2` 浅色正文 | 14.50 | AAA |
+| `#6a716d` on `#f6f6f2` 浅色次要 | 4.62 | AA |
+| `#1a7f37` on `#f6f6f2` 浅色绿 | 4.69 | AA |
+| `#ffffff` on `#1a7f37` 浅色按钮字 | 5.08 | AA |
+| `#8a5e00` on `#f6f6f2` 浅色琥珀 | 5.26 | AA（原 `#9a6700` 为 4.49，已换） |
+
+## 八、响应式
+
+- `>900px`：五列表格、三格面板并排、截图两栏（`16/10` 裁切）+ 一张通栏。
+- `≤900px`：表格降到四列（隐藏 kind，ver 贴右）、面板全部单列、截图单列、`<br class="bw">` 在标题里失效（`display:none`），标题改由 `text-wrap: balance` 断开。
+- `≤640px`：顶栏折成两行——第一行 `jt@local:~$` + 主题按钮，第二行导航；版本号从右侧收起。
+- `≤520px`：命令块字号降到 11.5px，改为横向滚动而不是折行。
+
+## 九、落地顺序（改 Astro 源码时）
+
+1. `src/styles/tokens.css`：用第三节的令牌整份替换（现在还是 `--brand-blue: #2457d6` 那一套）。
+2. `src/styles/global.css`：换字体栈、基础字号、`::selection`、`:focus-visible`、滚动条配色、`[data-theme]` 两套变量。
+3. `SiteHeader.astro`：顶栏三段式 + 主题按钮；`SiteFooter.astro`：`[ok]` 行。
+4. `index.astro`：索引表 + 通栏截图 + 三格要点 + `cat about.md`。
+5. `ProductLayout.astro` + `DownloadTable.astro`：下载表与安装命令块两条分支（`kind === 'plugin'`）。
+6. 跑 `npm run build` 与 `npm run check:links`，再用 `.impeccable/mocks/proof/shot.mjs` 对 `/`、`/work-station/`、`/git-branch-tool/` 各截 1440 与 390 两版核对。
+
+## 十、硬红线（写代码时不许破）
+
+- 绿只表达状态与操作，不做标题装饰、不做渐变、不做发光。
+- 不用 emoji 当图标；需要图标时手绘 12–16px 的 SVG 线稿。
+- 不用等宽字排大段正文（≤56ch 且只到 13.5px）。
+- 不给表格加圆角和阴影；不做「假终端」的假命令输出。
+- 深浅两套都要单独实测对比度，不能靠推断。
+
+## 十一、未做
+
+- 没有改任何 Astro 源码，`npm run build` 出来的仍是旧版蓝站。
+- 「几件事」产品页没有单独出图（结构与工作台一致，只是没有 `specs` 里的三档数字，改成功能条目即可）。
+- 空状态、加载骨架、键盘 Tab 顺序只在本文档里定规则，未在效果图里演示。
