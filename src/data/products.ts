@@ -275,7 +275,7 @@ export const products: Product[] = [
     year: 2026,
     tone: 'blue',
     preview: 'browser',
-    tagline: '在对话界面里换分支，不用切回终端。',
+    tagline: '换分支不用切回终端。',
     summary:
       '给 DeepSeek Harness 写的一个分支控件。输入框旁边放着分支图标和当前分支名，点开就能看到本地与远程分支、和上游的差距，直接切换或新建；工作目录还不是仓库时，同一个面板里就能初始化。',
     platforms: ['Windows', 'macOS', 'Linux'],
