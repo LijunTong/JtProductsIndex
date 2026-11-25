@@ -1,4 +1,5 @@
 ---
+import '../styles/fonts.css'
 import '../styles/tokens.css'
 import '../styles/global.css'
 import SiteHeader from '../components/SiteHeader.astro'
@@ -28,7 +29,7 @@ const ogImageUrl = new URL(ogImage ?? `${base}og.png`, Astro.site)
 ---
 
 <!doctype html>
-<html lang="zh-CN" data-theme="light">
+<html lang="zh-CN" data-theme="dark">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -37,8 +38,8 @@ const ogImageUrl = new URL(ogImage ?? `${base}og.png`, Astro.site)
     <link rel="canonical" href={canonical} />
     {noindex && <meta name="robots" content="noindex" />}
     <link rel="icon" href={`${base}favicon.svg`} type="image/svg+xml" />
-    <meta name="theme-color" content="#F3F5F6" />
-    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#08090A" />
+    <meta name="color-scheme" content="dark light" />
 
     <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content="JT 出品" />
@@ -59,12 +60,12 @@ const ogImageUrl = new URL(ogImage ?? `${base}og.png`, Astro.site)
       ;(() => {
         try {
           const stored = localStorage.getItem('theme')
-          const theme = stored === 'light' || stored === 'dark' ? stored : 'light'
+          const theme = stored === 'light' || stored === 'dark' ? stored : 'dark'
           const root = document.documentElement
           root.dataset.theme = theme
           root.style.colorScheme = theme
           const meta = document.querySelector('meta[name="theme-color"]')
-          if (meta) meta.setAttribute('content', theme === 'light' ? '#F3F5F6' : '#101418')
+          if (meta) meta.setAttribute('content', theme === 'light' ? '#F6F6F2' : '#08090A')
         } catch {}
       })()
     </script>

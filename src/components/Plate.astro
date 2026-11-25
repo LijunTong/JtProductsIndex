@@ -1,0 +1,102 @@
+---
+import { Image } from 'astro:assets'
+import type { Shot } from '../data/products'
+
+interface Props {
+  shot: Shot
+  /** 元数据条里显示的"文件名"，默认取图片来源文件名 */
+  filename?: string
+  loading?: 'eager' | 'lazy'
+  sizes?: string
+  widths?: number[]
+  /** 传了就按这个比例裁切（截图高度不一时用来对齐栅格） */
+  ratio?: string
+  objectPosition?: string
+  class?: string
+}
+
+const {
+  shot,
+  filename,
+  loading = 'lazy',
+  sizes = '(min-width: 1100px) 1120px, 94vw',
+  widths = [640, 1024, 1600],
+  ratio,
+  objectPosition = 'top left',
+  class: className,
+} = Astro.props
+
+const name = filename ?? shot.file
+---
+
+<figure class:list={['plate', className]}>
+  <div class:list={['plate-media', { 'plate-media--fit': Boolean(ratio) }]} style={ratio ? `--ratio:${ratio}` : undefined}>
+    <Image
+      src={shot.src}
+      alt={shot.alt}
+      widths={widths}
+      sizes={sizes}
+      loading={loading}
+      format="webp"
+      quality={82}
+      style={ratio ? `object-position:${objectPosition}` : undefined}
+    />
+  </div>
+  <figcaption class="meta">
+    <span class="f">{name}</span>
+    <span class="cap">{shot.caption}</span>
+  </figcaption>
+</figure>
+
+<style>
+  .plate {
+    margin: 0;
+    min-width: 0;
+  }
+
+  .plate-media {
+    border: 1px solid var(--rule);
+    background: var(--panel);
+    overflow: hidden;
+  }
+
+  .plate-media :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .plate-media--fit {
+    aspect-ratio: var(--ratio, 16 / 10);
+  }
+
+  .plate-media--fit :global(img) {
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .plate:hover .plate-media {
+    border-color: var(--dim-2);
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 2px 14px;
+    padding-top: 7px;
+    color: var(--dim-2);
+    font-size: 10.5px;
+    letter-spacing: 0.02em;
+  }
+
+  .f {
+    color: var(--amber);
+  }
+
+  .cap {
+    flex: 1 1 12ch;
+    min-width: 0;
+    color: var(--dim);
+  }
+</style>

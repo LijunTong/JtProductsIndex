@@ -1,111 +1,65 @@
 ---
-import { withBase } from '../lib/url'
+import { products } from '../data/products'
 
+const shotCount = products.reduce((sum, product) => sum + product.shots.length, 0)
 const year = new Date().getFullYear()
 ---
 
-<footer class="site-footer">
-  <div class="container footer-inner">
-    <div class="footer-brand">
-      <a class="footer-name" href={withBase('/')}>
-        <span class="brand-mark" aria-hidden="true">JT</span>
-        <span>JT 出品</span>
+<footer class="foot">
+  <div class="wrap inner">
+    <p class="ok">
+      <span class="accent">[ok]</span>
+      {products.length} 个项目 · {shotCount} 张截图 · 无账号 · 无统计脚本
+    </p>
+
+    <div class="links">
+      <a href="https://github.com/LijunTong" rel="noopener" target="_blank">
+        github.com/LijunTong<span class="ext" aria-hidden="true"> ↗</span>
       </a>
-      <p class="footer-note">自己做、自己用的软件。数据尽量留在你自己的机器上。</p>
+      <span class="dim-2">© {year} JT 出品</span>
     </div>
-
-    <nav class="footer-links" aria-label="页脚导航">
-      <a href={withBase('/#projects')}>项目</a>
-      <a href="https://github.com/LijunTong/work-station" rel="noopener" target="_blank">工作台源码</a>
-      <a href="https://github.com/LijunTong/Something" rel="noopener" target="_blank">几件事源码</a>
-      <a href="https://github.com/LijunTong" rel="noopener" target="_blank">GitHub</a>
-    </nav>
-
-    <p class="footer-meta mono">© {year} joont · Astro · 无账户、无追踪</p>
   </div>
 </footer>
 
 <style>
-  .site-footer {
-    border-top: 1px solid var(--border);
-    padding-block: 44px 28px;
+  .foot {
+    margin-top: 64px;
+    border-top: 1px solid var(--rule);
   }
 
-  .footer-inner {
-    display: grid;
-    gap: 28px;
-  }
-
-  .footer-brand {
-    display: grid;
-    gap: 10px;
-    align-content: start;
-  }
-
-  .footer-name {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    width: fit-content;
-    font-weight: 700;
-  }
-
-  .brand-mark {
-    display: grid;
-    place-items: center;
-    width: 28px;
-    height: 28px;
-    border-radius: var(--radius-sm);
-    background: var(--text);
-    color: var(--bg);
-    font-family: var(--font-mono);
-    font-size: 0.6563rem;
-    font-weight: 700;
-    line-height: 1;
-  }
-
-  .footer-note {
-    max-width: 38ch;
-    color: var(--muted);
-    font-size: 0.875rem;
-    line-height: 1.6;
-  }
-
-  .footer-links {
+  .inner {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px 22px;
-    font-size: 0.875rem;
+    justify-content: space-between;
+    gap: 8px 24px;
+    padding-block: 18px 28px;
+    font-size: 11.5px;
   }
 
-  .footer-links a {
-    color: var(--muted);
-    transition: color var(--dur-fast) var(--ease);
+  .ok {
+    color: var(--dim);
   }
 
-  .footer-links a:hover {
-    color: var(--text);
+  .ok :global(.accent) {
+    margin-right: 6px;
   }
 
-  .footer-meta {
-    padding-top: 20px;
-    border-top: 1px solid var(--border);
-    color: var(--faint);
-    font-size: 0.6875rem;
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 18px;
   }
 
-  @media (min-width: 820px) {
-    .footer-inner {
-      grid-template-columns: minmax(0, 1fr) minmax(280px, 0.8fr);
-      align-items: start;
-    }
+  .links a {
+    color: var(--dim);
+    transition: color var(--dur) var(--ease);
+  }
 
-    .footer-links {
-      justify-content: flex-end;
-    }
+  .links a:hover {
+    color: var(--green);
+  }
 
-    .footer-meta {
-      grid-column: 1 / -1;
-    }
+  .ext {
+    color: var(--dim-2);
   }
 </style>

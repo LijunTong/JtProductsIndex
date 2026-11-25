@@ -18,6 +18,8 @@ import gbInit from '../assets/shots/git-branch-tool/init-repo.png'
 
 export type Shot = {
   src: ImageMetadata
+  /** 原始文件名，仅用于界面展示（构建后 src 会带哈希） */
+  file: string
   alt: string
   caption: string
 }
@@ -129,31 +131,37 @@ export const products: Product[] = [
     shots: [
       {
         src: wsBoard,
+        file: 'board-dark.png',
         alt: '工作台的深色看板界面：待办、进行中、已阻塞、已完成四列任务卡，顶部显示逾期数量。',
         caption: '看板：四列流转，逾期标红',
       },
       {
         src: wsDashboard,
+        file: 'dashboard.png',
         alt: '工作台仪表盘：今日、本周、本月的完成率圆环，需要立刻处理提示，今日任务清单与项目进度。',
         caption: '仪表盘：完成率、逾期与项目进度',
       },
       {
         src: wsTasks,
+        file: 'tasks.png',
         alt: '工作台的任务列表，按截止时间排列，显示优先级、所属项目和状态。',
         caption: '任务列表：所有待办按截止时间排开',
       },
       {
         src: wsReminders,
+        file: 'reminders.png',
         alt: '工作台的提醒列表，显示每条任务的下次提醒时间与开关。',
         caption: '提醒：到点推系统通知',
       },
       {
         src: wsPalette,
+        file: 'command-palette.png',
         alt: '工作台的命令面板浮层，可搜索任务或视图，右侧列出快捷键。',
         caption: '命令面板：键盘直达',
       },
       {
         src: wsTheme,
+        file: 'custom-theme.png',
         alt: '工作台的自定义主题对话框，可选择强调色并实时预览界面配色。',
         caption: '主题：浅色、深色与自定义强调色',
       },
@@ -224,31 +232,37 @@ export const products: Product[] = [
     shots: [
       {
         src: smDashboard,
+        file: 'dashboard.png',
         alt: '几件事仪表盘：左侧导航，右侧依次是天气卡片、今日日程、今日待办和番茄钟。',
         caption: '仪表盘：一屏看完今天',
       },
       {
         src: smWeather,
+        file: 'weather.png',
         alt: '几件事的天气页：城市标签、当前温度与天气图标、湿度风速降水，下方是逐时预报。',
         caption: '天气：多城市与逐时预报',
       },
       {
         src: smTodo,
+        file: 'todo.png',
         alt: '几件事的待办页：任务带着截止时间和优先级标签，可直接勾选完成。',
         caption: '待办：截止时间与优先级',
       },
       {
         src: smSchedule,
+        file: 'schedule.png',
         alt: '几件事的日程页：按时间轴排列当天的日程，每条显示时间、时长与提前提醒。',
         caption: '日程：时间轴与提前提醒',
       },
       {
         src: smMail,
+        file: 'mail.png',
         alt: '几件事的邮件页：左侧统一收件箱与文件夹，右侧邮件列表显示发件人、主题与摘要。',
         caption: '邮件：本机 IMAP 收件箱',
       },
       {
         src: smMcp,
+        file: 'mcp.png',
         alt: '几件事的设置页 Agent 接入面板：MCP 服务开关、本机端口 3939、访问令牌与客户端配置片段。',
         caption: 'MCP：把计划写成待办',
       },
@@ -317,22 +331,26 @@ export const products: Product[] = [
     ],
     shots: [
       {
-        src: gbOverview,
-        alt: 'DeepSeek Harness 的首页：输入框工具栏里是分支图标、当前分支 master 和一个绿色状态点。',
-        caption: '控件：当前分支就在输入框旁边',
-      },
-      {
         src: gbPanel,
+        file: 'branch-panel.png',
         alt: '分支面板：顶部是筛选框，本地分支逐个列出，当前分支标「当前」，其余显示与上游的领先落后数量，底部是新建分支的输入框与起点下拉。',
         caption: '面板：本地、远程与上游差距',
       },
       {
         src: gbNew,
+        file: 'new-branch.png',
         alt: '在分支面板底部填入新分支名 feature/git-ui，从 master 起点的下拉里选择起点后点「创建并切换」。',
         caption: '新建：分支名 + 起点',
       },
       {
+        src: gbOverview,
+        file: 'overview.png',
+        alt: 'DeepSeek Harness 的首页：输入框工具栏里是分支图标、当前分支 master 和一个绿色状态点。',
+        caption: '控件：当前分支就在输入框旁边',
+      },
+      {
         src: gbInit,
+        file: 'init-repo.png',
         alt: '非 Git 目录下的分支面板：显示当前目录不是 Git 仓库，并给出「在此目录创建 Git 仓库」按钮。',
         caption: '非 Git 目录：一键初始化',
       },

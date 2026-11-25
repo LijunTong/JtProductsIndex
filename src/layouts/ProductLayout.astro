@@ -1,6 +1,6 @@
 ---
 import BaseLayout from './BaseLayout.astro'
-import ProjectPreview from '../components/ProjectPreview.astro'
+import Plate from '../components/Plate.astro'
 import SectionHeading from '../components/SectionHeading.astro'
 import FeatureGrid from '../components/FeatureGrid.astro'
 import ShotGallery from '../components/ShotGallery.astro'
@@ -15,10 +15,23 @@ interface Props {
 
 const { product } = Astro.props
 const others = products.filter((p) => p.slug !== product.slug)
+const isPlugin = product.kind === 'plugin'
 const [cover, ...gallery] = product.shots
 
-const cta = product.cta ?? { label: `下载 ${product.name}`, href: product.releases ?? product.repo }
-const ctaExternal = !cta.href.startsWith('#')
+/** 安装命令按 token 上色：命令名绿、参数名暗、参数值琥珀。 */
+type CommandPart = { kind: 'text'; text: string; cls: string } | { kind: 'pair'; key: string; value: string }
+
+const parts: CommandPart[] = (product.install?.command ?? '')
+  .split(/(\s+)/)
+  .filter(Boolean)
+  .map((token) => {
+    if (/^\s+$/.test(token)) return { kind: 'text', text: token, cls: '' }
+    const eq = token.indexOf('=')
+    if (eq > 0) {
+      return { kind: 'pair', key: token.slice(0, eq), value: token.slice(eq + 1) }
+    }
+    return { kind: 'text', text: token, cls: /^[\w-]+$/.test(token) ? 'p' : 'arg' }
+  })
 
 const origin = Astro.site ?? new URL('https://lijuntong.github.io')
 const pageUrl = new URL(withBase(`/${product.slug}/`), origin).href
@@ -46,440 +59,594 @@ const jsonLd = {
   ogImage={cover.src.src}
   jsonLd={jsonLd}
 >
-  <div class="product-page" data-tone={product.tone}>
+  <div class="page">
+    <div class="wrap">
+      <nav class="crumb" aria-label="位置">
+        <a href={withBase('/#projects')}>~/products</a>
+        <span class="dim-2">/</span>
+        <span class="here">{product.slug}</span>
+      </nav>
+    </div>
+
     <section class="hero">
-      <div class="container hero-grid">
-        <div class="hero-copy">
-          <a class="back text-link" href={withBase('/#projects')}>
-            <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
-              <path d="M12 8H4M7 5 4 8l3 3" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-            全部项目
-          </a>
-
-          <div class="project-meta">
-            <span class="tag tag--status">{product.statusLabel}</span>
-            <span class="tag">{product.kindLabel}</span>
-            <span class="project-year mono">{product.year}</span>
-          </div>
-
-          <h1>{product.name}</h1>
+      <div class="wrap hero-grid">
+        <div class="hero-main">
+          <h1>
+            {product.name}
+            <span class="en">{product.englishName}</span>
+          </h1>
           <p class="tagline">{product.tagline}</p>
           <p class="summary">{product.summary}</p>
-
-          <p class="hero-meta mono">
-            {product.platforms.join(' / ')} · v{product.version}
-          </p>
-
-          <div class="actions">
-            <a
-              class="btn btn--primary"
-              href={cta.href}
-              rel={ctaExternal ? 'noopener' : undefined}
-              target={ctaExternal ? '_blank' : undefined}
-            >
-              {cta.label}
-              <svg class="icon" viewBox="0 0 18 18" aria-hidden="true">
-                <path d="M9 2.5v8M6 7.8l3 3 3-3M3.5 13.5h11" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
-            </a>
-            <a class="btn btn--quiet" href={product.repo} rel="noopener" target="_blank">
-              查看源码
-              <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
-                <path d="M5 11 11 5M6 5h5v5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
-            </a>
-          </div>
         </div>
 
-        <ProjectPreview
-          product={product}
-          cover={cover}
-          loading="eager"
-          sizes="(min-width: 1000px) 690px, 94vw"
-          widths={[640, 960, 1440]}
-        />
+        <dl class="meta-grid">
+          <div>
+            <dt>version</dt>
+            <dd>v{product.version}</dd>
+          </div>
+          <div>
+            <dt>kind</dt>
+            <dd>{product.kindLabel}</dd>
+          </div>
+          <div>
+            <dt>platforms</dt>
+            <dd>{product.platforms.join(' · ')}</dd>
+          </div>
+          <div>
+            <dt>state</dt>
+            <dd class="state">{product.statusLabel}</dd>
+          </div>
+        </dl>
       </div>
     </section>
 
-    <div class="metrics">
-      <div class="container metrics-grid">
+    <section class="wrap section">
+      <SectionHeading
+        command={product.install ? 'install' : 'ls releases/'}
+        title={product.install ? '安装' : '下载'}
+        description={product.install ? '装进 DeepSeek Harness，不需要额外配置。' : '安装包都在 GitHub Releases，点开即下载。'}
+      />
+
+      {product.install ? (
+        <div class="install">
+          <p class="install-note">{product.install.note}</p>
+
+          <div class="cmd">
+            <div class="cmd-body">
+              <code><span class="sigil">$</span>
+                {parts.map((part) =>
+                  part.kind === 'pair' ? (
+                    <>
+                      <span class="k">{part.key}</span>
+                      <span class="eq">=</span>
+                      <span class="v">{part.value}</span>
+                    </>
+                  ) : (
+                    <span class={part.cls || undefined}>{part.text}</span>
+                  ),
+                )}
+              </code>
+            </div>
+            <div class="cmd-bar">
+              <button class="copy" type="button" data-copy={product.install.command}>copy</button>
+              <span class="hint">在插件管理器里执行</span>
+              <a class="btn" href={product.repo} rel="noopener" target="_blank">源码 ↗</a>
+            </div>
+          </div>
+
+          <ol class="steps">
+            {product.install.steps.map((step) => (
+              <li>{step}</li>
+            ))}
+          </ol>
+        </div>
+      ) : (
+        <DownloadTable downloads={product.downloads} releases={product.releases} />
+      )}
+    </section>
+
+    <section class="wrap section">
+      <div class="specs">
         {product.metrics.map((metric) => (
-          <div class="metric">
-            <span class="metric-value">{metric.value}</span>
-            <span class="metric-label">{metric.label}</span>
+          <div class="spec">
+            <b>{metric.value}</b>
+            <span>{metric.label}</span>
           </div>
         ))}
       </div>
-    </div>
+    </section>
 
-    <section class="section features-section">
-      <div class="container">
-        <SectionHeading
-          title="能做什么"
-          description="围绕每天真正会用到的动作组织，不把功能堆成一张清单。"
+    <section class="wrap section">
+      <SectionHeading
+        command="cat features.md"
+        title="能做什么"
+        description="围绕每天真正会用到的动作组织，不把功能堆成一张清单。"
+      />
+      <div class="block">
+        <FeatureGrid features={product.features} />
+      </div>
+    </section>
+
+    <section class="wrap section">
+      <SectionHeading
+        command="open screens/"
+        title="界面"
+        description="点任意一张截图放大，看真实界面。"
+      />
+
+      <div class="block">
+        <Plate
+          shot={cover}
+          loading="eager"
+          sizes="(min-width: 1100px) 1120px, 94vw"
+          ratio={isPlugin ? '4 / 3' : undefined}
+          objectPosition={isPlugin ? 'center' : 'top left'}
         />
+      </div>
+
+      {gallery.length > 0 && (
         <div class="block">
-          <FeatureGrid features={product.features} columns={3} />
+          <ShotGallery shots={gallery} />
         </div>
-      </div>
+      )}
     </section>
 
-    <section class="section section--muted">
-      <div class="container">
-        <SectionHeading title="界面" description="点击任意一张截图查看完整界面。" />
-        <div class="block">
-          <ShotGallery shots={gallery} eagerFirst />
+    <section class="wrap section">
+      <SectionHeading
+        command="cat runtime.md"
+        title="运行与数据"
+        description="运行环境、技术构成和数据放在哪里，都写在这里。"
+      />
+
+      <div class="facts">
+        <div class="fact">
+          <h3>运行环境</h3>
+          <ul>
+            {product.requirements.map((item) => (
+              <li>{item}</li>
+            ))}
+          </ul>
+        </div>
+
+        <div class="fact">
+          <h3>你的数据</h3>
+          <p>{product.dataNote}</p>
+        </div>
+
+        <div class="fact">
+          <h3>技术构成</h3>
+          <StackList stack={product.stack} />
         </div>
       </div>
-    </section>
 
-    <section id="install" class="section">
-      <div class="container">
-        <SectionHeading
-          title="运行与安装"
-          description="运行环境、安装方式和数据位置都放在这一处。"
-        />
-
-        <div class="details-grid">
-          <div class="stack-block">
-            <h3>技术构成</h3>
-            <StackList stack={product.stack} />
-          </div>
-
-          <div class="download-block">
-            <h3>{product.install ? '安装' : '下载'}</h3>
-
-            {product.install ? (
-              <div class="install">
-                <p class="install-note">{product.install.note}</p>
-                <pre class="install-command"><code>{product.install.command}</code></pre>
-                <ol class="install-steps">
-                  {product.install.steps.map((step) => (
-                    <li>{step}</li>
-                  ))}
-                </ol>
-              </div>
-            ) : (
-              <DownloadTable downloads={product.downloads} releases={product.releases} />
-            )}
-
-            <div class="notes">
-              <div>
-                <h4>运行环境</h4>
-                <ul>
-                  {product.requirements.map((item) => <li>{item}</li>)}
-                </ul>
-              </div>
-              <div>
-                <h4>你的数据</h4>
-                <p>{product.dataNote}</p>
-              </div>
-            </div>
-
-            <p class="notes-source mono">
-              源码：
-              <a href={product.repo} rel="noopener" target="_blank">
-                {product.repo.replace('https://', '')}
-              </a>
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <nav class="next container" aria-label="其他项目">
-      <a href={withBase('/#projects')}>
-        <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
-          <path d="M12 8H4M7 5 4 8l3 3" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
-        返回全部项目
-      </a>
-      {others.map((other) => (
-        <a href={withBase(`/${other.slug}/`)}>
-          接着看：{other.name}
-          <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
-            <path d="M4 8h8M9 5l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
+      <p class="source">
+        <span class="dim-2">src →</span>
+        <a href={product.repo} rel="noopener" target="_blank">
+          {product.repo.replace('https://', '')} ↗
         </a>
-      ))}
+      </p>
+    </section>
+
+    <nav class="wrap next" aria-label="其他项目">
+      <a href={withBase('/#projects')}>
+        <span class="dim-2">←</span> 全部项目
+      </a>
+      <div class="others">
+        {others.map((other) => (
+          <a href={withBase(`/${other.slug}/`)}>
+            接着看：{other.name} <span class="dim-2">→</span>
+          </a>
+        ))}
+      </div>
     </nav>
   </div>
 </BaseLayout>
 
 <style>
+  .page {
+    padding-bottom: 8px;
+  }
+
+  .crumb {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding-block: 14px;
+    border-bottom: 1px solid var(--rule-soft);
+    color: var(--dim);
+    font-size: 11.5px;
+  }
+
+  .crumb a {
+    transition: color var(--dur) var(--ease);
+  }
+
+  .crumb a:hover {
+    color: var(--green);
+  }
+
+  .here {
+    color: var(--fg);
+  }
+
   .hero {
-    padding-block: clamp(34px, 4.5vw, 64px) clamp(48px, 6vw, 80px);
+    padding-block: clamp(26px, 3.6vw, 44px) clamp(26px, 3.6vw, 42px);
   }
 
   .hero-grid {
     display: grid;
+    gap: 26px;
+  }
+
+  .hero-main {
     min-width: 0;
-    gap: clamp(30px, 4vw, 56px);
-    align-items: center;
-  }
-
-  .hero-copy {
-    display: grid;
-    min-width: 0;
-    justify-items: start;
-    gap: 16px;
-  }
-
-  .back {
-    font-size: 0.8125rem;
-  }
-
-  .project-meta {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 7px;
-    margin-top: 4px;
-  }
-
-  .project-year {
-    color: var(--faint);
-    font-size: 0.75rem;
   }
 
   h1 {
-    font-size: clamp(2.8rem, 5.2vw, 4.4rem);
-    line-height: 1;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 16px;
+    color: var(--bright);
+    font-family: var(--font-sans);
+    font-size: clamp(34px, 6.6vw, 74px);
+    font-weight: 700;
+    line-height: 1.02;
+    letter-spacing: -0.045em;
+  }
+
+  .en {
+    color: var(--dim-2);
+    font-family: var(--font-mono);
+    font-size: clamp(11px, 1.1vw, 13px);
+    font-weight: 400;
+    letter-spacing: 0.08em;
   }
 
   .tagline {
-    max-width: 28ch;
+    max-width: 34ch;
+    margin-top: 14px;
+    color: var(--fg);
+    font-size: clamp(14px, 1.7vw, 17px);
+    line-height: 1.6;
     text-wrap: balance;
-    font-size: clamp(1.2rem, 2vw, 1.5rem);
-    font-weight: 650;
-    line-height: 1.45;
   }
 
   .summary {
-    max-width: 52ch;
-    color: var(--muted);
-    font-size: 0.9375rem;
-    line-height: 1.72;
+    max-width: 58ch;
+    margin-top: 10px;
+    color: var(--dim);
+    font-size: 12.5px;
+    line-height: 1.85;
+    text-wrap: pretty;
   }
 
-  .hero-meta {
-    color: var(--faint);
-    font-size: 0.6875rem;
-  }
-
-  .actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 6px;
-  }
-
-  .product-page :global(.hero .preview) {
-    box-shadow: var(--shadow-lg);
-  }
-
-  .metrics {
-    border-block: 1px solid var(--border);
-    background: var(--surface-2);
-  }
-
-  .metrics-grid {
+  .meta-grid {
     display: grid;
-    gap: 0;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1px;
+    margin: 0;
+    border: 1px solid var(--rule);
+    background: var(--rule);
   }
 
-  .metric {
+  .meta-grid > div {
     display: grid;
-    gap: 4px;
-    padding-block: 18px;
+    gap: 2px;
+    padding: 9px 11px;
+    background: var(--panel);
   }
 
-  .metric + .metric {
-    border-top: 1px solid var(--border);
+  .meta-grid dt {
+    color: var(--dim-2);
+    font-size: 9.5px;
+    letter-spacing: 0.12em;
   }
 
-  .metric-value {
-    color: var(--project-ink);
-    font-size: 1.375rem;
-    font-weight: 700;
-    line-height: 1.1;
+  .meta-grid dd {
+    margin: 0;
+    color: var(--fg);
+    font-size: 11.5px;
+    overflow-wrap: anywhere;
   }
 
-  .metric-label {
-    max-width: 34ch;
-    color: var(--muted);
-    font-size: 0.8125rem;
-    line-height: 1.55;
+  .state {
+    color: var(--green);
+  }
+
+  .state::before {
+    content: '● ';
+  }
+
+  .section {
+    padding-block: clamp(26px, 3.4vw, 40px);
+    border-top: 1px solid var(--rule);
   }
 
   .block {
-    margin-top: clamp(26px, 3vw, 40px);
-  }
-
-  .details-grid {
-    display: grid;
-    gap: clamp(32px, 4vw, 56px);
-    margin-top: clamp(26px, 3vw, 40px);
-  }
-
-  .stack-block,
-  .download-block {
-    display: grid;
-    gap: 14px;
-    align-content: start;
-    min-width: 0;
-  }
-
-  .stack-block > h3,
-  .download-block > h3 {
-    font-size: 1.125rem;
+    margin-top: 16px;
   }
 
   .install {
     display: grid;
-    gap: 14px;
+    gap: 16px;
+    margin-top: 16px;
   }
 
   .install-note {
-    max-width: 62ch;
-    color: var(--muted);
-    font-size: 0.9375rem;
-    line-height: 1.7;
+    max-width: 66ch;
+    color: var(--dim);
+    font-size: 12.5px;
+    line-height: 1.8;
   }
 
-  .install-command {
-    padding: 13px 15px;
+  .cmd {
+    border: 1px solid var(--rule);
+    background: var(--panel);
+  }
+
+  .cmd-body {
+    padding: 13px 14px;
     overflow-x: auto;
-    border: 1px solid var(--border);
-    border-radius: 3px;
-    background: var(--surface-2);
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    line-height: 1.6;
+    font-size: 12px;
+    line-height: 1.7;
     white-space: pre;
   }
 
-  .install-steps {
-    display: grid;
-    gap: 7px;
-    counter-reset: step;
-    list-style: none;
+  .cmd-body code {
+    font-family: var(--font-mono);
   }
 
-  .install-steps li {
+  .sigil {
+    margin-inline-end: 8px;
+    color: var(--green);
+  }
+
+  .k {
+    color: var(--fg);
+  }
+
+  .eq {
+    color: var(--dim-2);
+  }
+
+  .v {
+    color: var(--amber);
+  }
+
+  .p {
+    color: var(--green);
+  }
+
+  .arg {
+    color: var(--amber);
+  }
+
+  .copy {
+    padding: 3px 9px;
+    border: 1px solid var(--rule);
+    background: none;
+    color: var(--green);
+    font: inherit;
+    font-size: 11px;
+    cursor: pointer;
+    transition:
+      background var(--dur) var(--ease),
+      border-color var(--dur) var(--ease);
+  }
+
+  .copy:hover,
+  .copy[data-state='done'] {
+    border-color: var(--green);
+    background: color-mix(in srgb, var(--green) 12%, transparent);
+  }
+
+  .hint {
+    color: var(--dim);
+  }
+
+  .cmd-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px 14px;
+    padding: 7px 10px;
+    border-top: 1px solid var(--rule);
+    color: var(--dim-2);
+    font-size: 10.5px;
+  }
+
+  .steps {
     display: grid;
-    grid-template-columns: 22px minmax(0, 1fr);
-    gap: 8px;
-    align-items: baseline;
-    max-width: 62ch;
-    color: var(--muted);
-    font-size: 0.875rem;
-    line-height: 1.65;
+    gap: 6px;
+    counter-reset: step;
+  }
+
+  .steps li {
+    display: grid;
+    grid-template-columns: 3ch minmax(0, 1fr);
+    gap: 10px;
+    max-width: 70ch;
+    color: var(--dim);
+    font-size: 12px;
+    line-height: 1.75;
     counter-increment: step;
   }
 
-  .install-steps li::before {
-    content: counter(step);
-    color: var(--project-ink);
-    font-family: var(--font-mono);
-    font-size: 0.6875rem;
+  .steps li::before {
+    content: counter(step) '.';
+    color: var(--green);
+    font-size: 11px;
   }
 
-  .notes {
+  .specs {
     display: grid;
-    gap: 14px;
-    margin-top: 8px;
-    padding-top: 20px;
-    border-top: 1px solid var(--border);
+    border: 1px solid var(--rule);
+    background: var(--panel);
   }
 
-  .notes h4 {
-    margin-bottom: 6px;
-    font-size: 0.875rem;
-  }
-
-  .notes ul {
+  .spec {
     display: grid;
-    gap: 3px;
-    list-style: none;
+    gap: 5px;
+    padding: clamp(14px, 1.8vw, 20px) clamp(14px, 2vw, 22px);
+    border-bottom: 1px solid var(--rule);
   }
 
-  .notes li,
-  .notes p {
-    max-width: 66ch;
-    color: var(--muted);
-    font-size: 0.875rem;
+  .spec:last-child {
+    border-bottom: 0;
+  }
+
+  .spec b {
+    color: var(--bright);
+    font-family: var(--font-sans);
+    font-size: clamp(24px, 3vw, 33px);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.035em;
+  }
+
+  .spec span {
+    max-width: 30ch;
+    color: var(--dim);
+    font-size: 11.5px;
     line-height: 1.65;
   }
 
-  .notes-source {
-    padding-top: 14px;
-    border-top: 1px solid var(--border);
-    color: var(--faint);
+  .facts {
+    display: grid;
+    gap: 22px;
+    margin-top: 16px;
+  }
+
+  .fact h3 {
+    margin-bottom: 7px;
+    color: var(--bright);
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .fact ul {
+    display: grid;
+    gap: 4px;
+    border-top: 1px solid var(--rule-soft);
+  }
+
+  .fact li,
+  .fact p {
+    max-width: 68ch;
+    padding-top: 5px;
+    color: var(--dim);
+    font-size: 12px;
+    line-height: 1.75;
+  }
+
+  .fact ul + p,
+  .fact p {
+    border-top: 1px solid var(--rule-soft);
+  }
+
+  .source {
+    padding-top: 10px;
+    color: var(--dim);
+    font-size: 11px;
     overflow-wrap: anywhere;
   }
 
-  .notes-source a {
-    color: var(--muted);
-    text-underline-offset: 4px;
+  .source a {
+    transition: color var(--dur) var(--ease);
   }
 
-  .notes-source a:hover {
-    color: var(--project-ink);
+  .source a:hover {
+    color: var(--green);
     text-decoration: underline;
   }
 
   .next {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     justify-content: space-between;
-    gap: 12px 24px;
-    padding-block: 28px;
-    border-top: 1px solid var(--border);
+    gap: 10px 24px;
+    padding-block: 18px;
+    border-top: 1px solid var(--rule);
+    font-size: 11.5px;
+  }
+
+  .others {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 20px;
   }
 
   .next a {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    color: var(--muted);
-    font-size: 0.875rem;
-    font-weight: 600;
+    color: var(--dim);
+    transition: color var(--dur) var(--ease);
   }
 
   .next a:hover {
-    color: var(--text);
+    color: var(--green);
   }
 
-  @media (min-width: 720px) {
-    .metrics-grid {
+  @media (min-width: 760px) {
+    .specs {
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 
-    .metric {
-      padding-block: 20px;
+    .spec {
+      border-bottom: 0;
+      border-inline-end: 1px solid var(--rule);
     }
 
-    .metric + .metric {
-      padding-inline-start: 24px;
-      border-top: 0;
-      border-inline-start: 1px solid var(--border);
+    .spec:last-child {
+      border-inline-end: 0;
     }
 
-    .notes {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+    .facts {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 28px;
     }
   }
 
-  @media (min-width: 1000px) {
+  @media (min-width: 980px) {
     .hero-grid {
-      grid-template-columns: minmax(360px, 0.8fr) minmax(0, 1.2fr);
-    }
-
-    .details-grid {
-      grid-template-columns: minmax(260px, 0.62fr) minmax(0, 1.38fr);
-      gap: clamp(48px, 6vw, 88px);
+      grid-template-columns: minmax(0, 1.3fr) minmax(240px, 0.7fr);
+      gap: clamp(28px, 4vw, 56px);
+      align-items: start;
     }
   }
 </style>
+
+<script is:inline>
+  ;(() => {
+    document.querySelectorAll('[data-copy]').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        const text = btn.dataset.copy ?? ''
+        try {
+          await navigator.clipboard.writeText(text)
+          btn.textContent = 'copied ✓'
+          btn.dataset.state = 'done'
+          setTimeout(() => {
+            btn.textContent = 'copy'
+            delete btn.dataset.state
+          }, 1600)
+        } catch {
+          const code = document.querySelector('.cmd-body code')
+          if (code) {
+            const range = document.createRange()
+            range.selectNodeContents(code)
+            const selection = window.getSelection()
+            selection?.removeAllRanges()
+            selection?.addRange(range)
+          }
+          btn.textContent = '按 Ctrl+C'
+          setTimeout(() => {
+            btn.textContent = 'copy'
+          }, 2400)
+        }
+      })
+    })
+  })()
+</script>

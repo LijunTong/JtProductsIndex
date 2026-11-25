@@ -1,146 +1,64 @@
-/* JT product index: a neutral product-lab shell with per-project accents. */
-:root {
-  color-scheme: light;
-
-  --bg: #f3f5f6;
-  --surface: #ffffff;
-  --surface-2: #e9edf0;
-  --surface-3: #dde3e8;
-  --text: #14181d;
-  --muted: #58616b;
-  --faint: #626b75;
-  --accent: #2457d6;
-  --accent-strong: #1944b4;
-  --accent-soft: #e8eefc;
-  --on-accent: #ffffff;
-  --success: #137a57;
-  --danger: #bd3f45;
-  --border: #d9dfe4;
-  --border-strong: #bcc5ce;
-  --shadow-sm: 0 1px 2px rgba(20, 24, 29, 0.06);
-  --shadow: 0 12px 32px -24px rgba(20, 24, 29, 0.38), 0 2px 6px rgba(20, 24, 29, 0.05);
-  --shadow-lg: 0 28px 64px -38px rgba(20, 24, 29, 0.46), 0 3px 10px rgba(20, 24, 29, 0.06);
-
-  --font-sans: "Segoe UI Variable Text", "Segoe UI", "Noto Sans SC", "PingFang SC",
-    "Microsoft YaHei UI", sans-serif;
-  --font-display: "Segoe UI Variable Display", "Segoe UI", "Noto Sans SC", "PingFang SC",
-    "Microsoft YaHei UI", sans-serif;
-  --font-mono: "Cascadia Code", "SFMono-Regular", "Cascadia Mono", "JetBrains Mono", Menlo,
-    Consolas, monospace;
-
-  --step--1: 0.8125rem;
-  --step-0: 1rem;
-  --step-1: 1.125rem;
-  --step-2: clamp(1.35rem, 1.8vw, 1.625rem);
-  --step-3: clamp(1.8rem, 2.8vw, 2.5rem);
-  --step-4: clamp(2.35rem, 4.5vw, 4rem);
-
-  --space-1: 4px;
-  --space-2: 8px;
-  --space-3: 12px;
-  --space-4: 16px;
-  --space-5: 24px;
-  --space-6: 32px;
-  --space-7: 48px;
-  --space-8: 64px;
-  --space-9: 96px;
-
-  --container: 1280px;
-  --gutter: clamp(20px, 4vw, 40px);
-  --section: clamp(64px, 7vw, 96px);
-
-  --radius: 8px;
-  --radius-sm: 6px;
-  --radius-pill: 999px;
-  --header-h: 64px;
-
-  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
-  --dur-fast: 140ms;
-  --dur: 240ms;
-
-  --project-accent: var(--accent);
-  --project-ink: var(--accent-strong);
-  --project-soft: var(--accent-soft);
-  --project-surface: #f8faff;
-}
-
+/* 终端档令牌：深色是本色，浅色是同构的另一套明度。
+   配色只承担语义 —— 绿=可执行/正常，琥珀=参数/文件名，红=错误。 */
+:root,
 [data-theme='dark'] {
   color-scheme: dark;
 
-  --bg: #101418;
-  --surface: #171c21;
-  --surface-2: #1e252c;
-  --surface-3: #283139;
-  --text: #f1f4f6;
-  --muted: #aab3bd;
-  --faint: #858f9a;
-  --accent: #7c9cff;
-  --accent-strong: #a0b8ff;
-  --accent-soft: #1a2748;
-  --on-accent: #0b1220;
-  --success: #65cda5;
-  --danger: #ff8589;
-  --border: #2a323a;
-  --border-strong: #3d4852;
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
-  --shadow: 0 16px 36px -24px rgba(0, 0, 0, 0.9), 0 2px 8px rgba(0, 0, 0, 0.25);
-  --shadow-lg: 0 36px 72px -40px rgba(0, 0, 0, 0.95), 0 5px 14px rgba(0, 0, 0, 0.28);
+  --bg: #08090a;
+  --panel: #0d0f10;
+  --panel-2: #111615;
+  --fg: #d8dbd2;
+  --bright: #f3f5ee;
+  --dim: #8b9289;
+  --dim-2: #767d74;
 
-  --project-surface: #171c21;
+  --green: #7ee787;
+  --green-ink: #0b1a0f;
+  --amber: #e3b341;
+  --red: #ff7b72;
+
+  --rule: #232823;
+  --rule-soft: #191d1a;
+
+  --selection-bg: #7ee787;
+  --selection-fg: #0b1a0f;
+  --scroll-thumb: #2f3630;
+  --scroll-track: #0d0f10;
+
+  --font-mono: 'JetBrains Mono', ui-monospace, 'Cascadia Mono', 'SFMono-Regular', Menlo,
+    'Microsoft YaHei', monospace;
+  --font-sans: 'Archivo', 'Helvetica Neue', 'PingFang SC', 'Hiragino Sans GB',
+    'Microsoft YaHei', sans-serif;
+
+  --pad: clamp(20px, 4.4vw, 64px);
+  --max: 1180px;
+  --header-h: 56px;
+
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --dur: 160ms;
 }
 
-[data-tone='violet'] {
-  --project-accent: #6556d9;
-  --project-ink: #403990;
-  --project-soft: #ecebfd;
-  --project-surface: #f8f7ff;
-}
+[data-theme='light'] {
+  color-scheme: light;
 
-[data-tone='teal'] {
-  --project-accent: #0e7657;
-  --project-ink: #095f46;
-  --project-soft: #e4f2ec;
-  --project-surface: #f6fbf9;
-}
+  --bg: #f6f6f2;
+  --panel: #fdfdfa;
+  --panel-2: #eeeeea;
+  --fg: #202422;
+  --bright: #0f1412;
+  --dim: #5f6663;
+  --dim-2: #6a716d;
 
-[data-tone='blue'] {
-  --project-accent: #2457d6;
-  --project-ink: #1944b4;
-  --project-soft: #e8eefc;
-  --project-surface: #f7f9ff;
-}
+  --green: #1a7f37;
+  --green-ink: #ffffff;
+  --amber: #8a5e00;
+  --red: #b3261e;
 
-[data-tone='orange'] {
-  --project-accent: #b84d22;
-  --project-ink: #913a18;
-  --project-soft: #faeae1;
-  --project-surface: #fff9f6;
-}
+  --rule: #dcdcd4;
+  --rule-soft: #e8e8e1;
 
-[data-theme='dark'] [data-tone='violet'] {
-  --project-accent: #9f94ff;
-  --project-ink: #c9c3ff;
-  --project-soft: #28234a;
-  --project-surface: #17151f;
-}
-
-[data-theme='dark'] [data-tone='teal'] {
-  --project-accent: #61cda9;
-  --project-ink: #a1e7d0;
-  --project-soft: #17342a;
-  --project-surface: #111c18;
-}
-
-[data-theme='dark'] [data-tone='blue'] {
-  --project-accent: #8ba8ff;
-  --project-ink: #b9c9ff;
-  --project-soft: #1a2748;
-  --project-surface: #121620;
-}
-
-[data-theme='dark'] [data-tone='orange'] {
-  --project-accent: #f09363;
-  --project-ink: #ffbe99;
-  --project-soft: #3a241a;
-  --project-surface: #1d1613;
+  --selection-bg: #1a7f37;
+  --selection-fg: #ffffff;
+  --scroll-thumb: #c9c9c0;
+  --scroll-track: #eeeeea;
 }

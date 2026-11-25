@@ -12,9 +12,10 @@
 
 | 层 | 选择 | 说明 |
 | --- | --- | --- |
-| 框架 | Astro 7（`output: 'static'`） | 默认零 JS，只有主题切换、灯箱、移动菜单少量内联脚本 |
-| 样式 | 原生 CSS + 自定义属性 | `src/styles/tokens.css` 集中色彩/字号/间距，无预处理器 |
+| 框架 | Astro 7（`output: 'static'`） | 默认零 JS，只有主题切换、灯箱、复制命令几段内联脚本 |
+| 样式 | 原生 CSS + 自定义属性 | `src/styles/tokens.css` 深色/浅色两套色彩令牌，无预处理器 |
 | 图片 | `astro:assets` | 构建期转 WebP、按宽度生成 srcset，自动写 width/height 防抖 |
+| 字体 | 自托管可变字体 | `public/fonts` 里的 Archivo / JetBrains Mono（Latin 子集，74 KB），无第三方 CDN 请求 |
 | 校验 | TypeScript strict + `astro check` | 内容源 `products.ts` 带完整类型 |
 | 发布 | GitHub Actions → Pages | 无第三方托管依赖 |
 
@@ -27,6 +28,7 @@ npm run build      # 产出 dist/
 npm run preview    # 预览构建结果
 npm run check      # 类型 + Astro 模板检查
 npm run check:links # 构建后检查站内链接
+npm run fonts      # 重新下载自托管字体（只在换字体时需要）
 ```
 
 Node ≥ 22。
@@ -42,11 +44,14 @@ src/
   pages/robots.txt.ts     # 构建期生成 robots
   layouts/BaseLayout.astro
   layouts/ProductLayout.astro
-  components/             # SiteHeader、ProjectPreview、ShotGallery 等
-  styles/tokens.css       # 设计令牌
+  components/             # SiteHeader、Plate（截图框）、ShotGallery、DownloadTable 等
+  styles/tokens.css       # 设计令牌（深/浅两套）
+  styles/fonts.css        # 自动生成：@font-face，勿手改
   assets/shots/           # 原始截图（构建期处理，不直接进 public）
-public/                   # favicon、og.png 等原样拷贝的文件
+public/                   # favicon、og.png、fonts/ 等原样拷贝的文件
 scripts/check-links.mjs   # 站内链接自检
+scripts/fetch-fonts.mjs   # 一次性：抓 Google Fonts 的 latin 可变字体
+scripts/gen-fonts-css.mjs # predev/prebuild：生成 styles/fonts.css（带 BASE_PATH 前缀）
 .github/workflows/deploy.yml
 ```
 
@@ -61,11 +66,13 @@ scripts/check-links.mjs   # 站内链接自检
 - `preview`：预览外壳，支持 `desktop`、`browser`、`phone`、`code`、`image`
 - `summary` / `tagline`：首屏文案，`summary` 同时用作 meta description
 - `features`：功能条目，`tag` 可选（如「核心」）
-- `shots`：截图数组，第一张同时是产品页 Hero 封面与分享图来源
+- `shots`：截图数组，第一张同时是产品页首图与分享图来源；每项必须有 `file`（图注里显示的原始文件名，构建后 `src` 会带哈希）
 - `downloads`：下载表格行，`href` 指向 GitHub Release 资产
 - `stack` / `requirements` / `dataNote`：技术栈、运行环境、数据说明
 
 截图放进 `src/assets/shots/<slug>/` 再用 `import` 引入；不要放 `public/`，否则不会做尺寸优化。
+
+界面方向的来龙去脉写在 `docs/design/terminal.md`（令牌、组件映射、对比度实测、落地记录），可选方向对照在 `docs/design/options.md`。
 
 ## 部署
 

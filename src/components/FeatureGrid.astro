@@ -3,79 +3,84 @@ import type { Feature } from '../data/products'
 
 interface Props {
   features: Feature[]
-  columns?: 2 | 3
 }
 
-const { features, columns = 2 } = Astro.props
+const { features } = Astro.props
 ---
 
-<ul class:list={['features', `cols-${columns}`]}>
+<ul class="feats">
   {features.map((feature) => (
-    <li class="feature">
-      <div class="feature-head">
-        <h3>{feature.title}</h3>
+    <li class="feat">
+      <h3>
+        <span class="plus" aria-hidden="true">+</span>
+        {feature.title}
         {feature.tag && <span class="tag">{feature.tag}</span>}
-      </div>
+      </h3>
       <p>{feature.body}</p>
     </li>
   ))}
 </ul>
 
 <style>
-  .features {
+  .feats {
     display: grid;
-    gap: 12px;
-    list-style: none;
+    gap: 0 40px;
   }
 
-  .feature {
-    display: grid;
-    align-content: start;
-    gap: 9px;
-    min-height: 148px;
-    padding: 20px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    background: var(--surface);
-    transition:
-      border-color var(--dur-fast) var(--ease),
-      box-shadow var(--dur var(--ease));
+  .feat {
+    padding-block: 14px 16px;
+    border-top: 1px solid var(--rule-soft);
   }
 
-  .feature:hover {
-    border-color: var(--border-strong);
-    box-shadow: var(--shadow-sm);
-  }
-
-  .feature-head {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 8px;
+  .feat:first-child,
+  .feat:nth-child(2) {
+    border-top: 1px solid var(--rule);
   }
 
   h3 {
-    font-size: 1rem;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 5px;
+    color: var(--bright);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
     line-height: 1.35;
   }
 
-  p {
-    max-width: 54ch;
-    color: var(--muted);
-    font-size: 0.9063rem;
-    line-height: 1.7;
+  .plus {
+    color: var(--green);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 400;
   }
 
-  @media (min-width: 720px) {
-    .cols-2,
-    .cols-3 {
+  .tag {
+    padding: 1px 6px;
+    border: 1px solid var(--rule);
+    color: var(--amber);
+    font-family: var(--font-mono);
+    font-size: 9.5px;
+    letter-spacing: 0.06em;
+    line-height: 1.6;
+  }
+
+  p {
+    max-width: 46ch;
+    color: var(--dim);
+    font-size: 12.5px;
+    line-height: 1.75;
+  }
+
+  @media (min-width: 760px) {
+    .feats {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
-  }
 
-  @media (min-width: 1060px) {
-    .cols-3 {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+    .feat:nth-child(2) {
+      border-top: 1px solid var(--rule);
     }
   }
 </style>
