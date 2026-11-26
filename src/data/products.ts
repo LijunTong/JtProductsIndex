@@ -1,6 +1,6 @@
 import type { ImageMetadata } from 'astro'
 import wsDashboard from '../assets/shots/work-station/dashboard.png'
-import wsBoard from '../assets/shots/work-station/board-dark.png'
+import wsBoard from '../assets/shots/work-station/board-light.png'
 import wsTasks from '../assets/shots/work-station/tasks.png'
 import wsReminders from '../assets/shots/work-station/reminders.png'
 import wsPalette from '../assets/shots/work-station/command-palette.png'
@@ -131,8 +131,8 @@ export const products: Product[] = [
     shots: [
       {
         src: wsBoard,
-        file: 'board-dark.png',
-        alt: '工作台的深色看板界面：待办、进行中、已阻塞、已完成四列任务卡，顶部显示逾期数量。',
+        file: 'board-light.png',
+        alt: '工作台的浅色看板界面：待办、进行中、已阻塞、已完成四列任务卡，顶部显示逾期数量。',
         caption: '看板：四列流转，逾期标红',
       },
       {

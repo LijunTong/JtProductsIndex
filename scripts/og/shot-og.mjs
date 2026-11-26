@@ -1,5 +1,4 @@
-// @ts-check
-// 固定尺寸截图：node ogshot.mjs <url> <outfile> [width] [height]
+// 固定尺寸截图：node scripts/og/shot-og.mjs <url> <outfile> [width] [height]
 // 用于 OG 图（1200×630）这类不跟站点视口绑定的静态图。
 import { spawn } from 'node:child_process';
 import { mkdtempSync, writeFileSync } from 'node:fs';
