@@ -124,6 +124,11 @@
 - `Shot` 增加 `file: string`（16 条全部补齐）。构建后 `src.src` 带哈希，图注要显示原始文件名只能显式带。
 - 分支切换的截图顺序改成「面板 → 首页 → 新建 → 初始化」：原来的首图是一张几乎全空的欢迎页，不适合当封面。
 
+**分享图**
+- `public/og.png` 重做成 1200×630 的终端档：提示行 `jt@local:~$ ls -1 products/` + 中文大标题（「清楚」绿色）+ 三行项目清单（名字琥珀、状态绿点）+ 底部 `[ok] 3 个项目 · 16 张真实截图` 与「无账号 · 无服务器 · 无统计脚本」。
+- 源文件在 `scripts/og/og.html`（不是构建产物，是静态图源），用 `scripts/og/shot-og.mjs` 定尺寸截图重生成；字体引用 `/JtProductsIndex/fonts/*.woff2`，所以必须经本地静态服务打开，`file://` 直接开会掉字体。
+- 产品页仍用自己的首图截图当 `og:image`（`ProductLayout.astro` 传 `ogImage`），只有首页和 404 用这张；新增 `og:image:alt` / `twitter:image:alt`。
+
 **验证**
 - `npm run check` 23 文件 0 error；`npm run build` 5 页；`BASE_PATH=/JtProductsIndex npm run build` 后 `npm run check:links` 73 个链接全部有效。
 - 按 CI 形态在 `/tmp/site/JtProductsIndex` 起静态服务截图核对，覆盖首页/工作台/几件事/分支切换/404 的深色与浅色、1440 与 390，`broken: []`。

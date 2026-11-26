@@ -1,0 +1,156 @@
+<!--
+  OG 分享图源文件（1200×630）。生成方式：
+  1) BASE_PATH=/JtProductsIndex npm run build
+  2) 把 dist 拷成 <服务根>/JtProductsIndex/，再把这个文件拷进去当 og.html
+  3) node scripts/og/shot-og.mjs http://127.0.0.1:4173/JtProductsIndex/og.html public/og.png 1200 630
+  字体走 /JtProductsIndex/fonts/*.woff2（构建产物），所以要经由本地静态服务打开，不能 file:// 直接开。
+-->
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <title>og</title>
+    <style>
+      @font-face {
+        font-family: 'Archivo';
+        font-style: normal;
+        font-weight: 400 700;
+        font-display: block;
+        src: url('/JtProductsIndex/fonts/archivo.woff2') format('woff2');
+      }
+      @font-face {
+        font-family: 'JetBrains Mono';
+        font-style: normal;
+        font-weight: 300 500;
+        font-display: block;
+        src: url('/JtProductsIndex/fonts/jetbrains-mono.woff2') format('woff2');
+      }
+
+      :root {
+        --bg: #08090a;
+        --fg: #d8dbd2;
+        --bright: #f3f5ee;
+        --dim: #8b9289;
+        --dim-2: #767d74;
+        --green: #7ee787;
+        --amber: #e3b341;
+        --rule: #232823;
+        --mono: 'JetBrains Mono', ui-monospace, 'Cascadia Mono', 'Microsoft YaHei', monospace;
+        --sans: 'Archivo', 'Helvetica Neue', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+      }
+
+      body {
+        width: 1200px;
+        height: 630px;
+        padding: 64px 64px 52px;
+        background: var(--bg);
+        color: var(--fg);
+        font-family: var(--mono);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .prompt {
+        color: var(--dim);
+        font-size: 19px;
+        letter-spacing: 0.01em;
+      }
+
+      .prompt .p {
+        color: var(--green);
+      }
+
+      .prompt .path {
+        color: var(--fg);
+      }
+
+      h1 {
+        color: var(--bright);
+        font-family: var(--sans);
+        font-size: 82px;
+        font-weight: 700;
+        line-height: 1.06;
+        letter-spacing: -0.045em;
+      }
+
+      h1 em {
+        color: var(--green);
+        font-style: normal;
+      }
+
+      main {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .list {
+        display: grid;
+        gap: 10px;
+        padding-bottom: 16px;
+        font-size: 21px;
+      }
+
+      .row {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 14ch 10ch 12ch;
+        align-items: baseline;
+        gap: 0;
+      }
+
+      .row .n {
+        color: var(--amber);
+      }
+
+      .row .k,
+      .row .v {
+        color: var(--dim-2);
+      }
+
+      .row .s {
+        color: var(--green);
+        text-align: right;
+      }
+
+      footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 24px;
+        padding-top: 18px;
+        border-top: 1px solid var(--rule);
+        color: var(--dim);
+        font-size: 18px;
+      }
+
+      footer .ok {
+        color: var(--green);
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <p class="prompt"><span class="p">jt@local:~$</span> <span class="path">ls -1 products/</span></p>
+
+      <h1>自己做的东西，<br />放在一个<em>清楚</em>的地方。</h1>
+
+      <div class="list">
+        <div class="row"><span class="n">work-station</span><span class="k">桌面应用</span><span class="v">v1.0.2</span><span class="s">● 可下载</span></div>
+        <div class="row"><span class="n">something</span><span class="k">桌面应用</span><span class="v">v1.0.3</span><span class="s">● 可下载</span></div>
+        <div class="row"><span class="n">git-branch-tool</span><span class="k">DSH 插件</span><span class="v">v1.0.0</span><span class="s">● 可安装</span></div>
+      </div>
+    </main>
+
+    <footer>
+      <span><span class="ok">[ok]</span> 3 个项目 · 16 张真实截图</span>
+      <span>无账号 · 无服务器 · 无统计脚本</span>
+    </footer>
+  </body>
+</html>

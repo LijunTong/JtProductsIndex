@@ -52,6 +52,7 @@ public/                   # favicon、og.png、fonts/ 等原样拷贝的文件
 scripts/check-links.mjs   # 站内链接自检
 scripts/fetch-fonts.mjs   # 一次性：抓 Google Fonts 的 latin 可变字体
 scripts/gen-fonts-css.mjs # predev/prebuild：生成 styles/fonts.css（带 BASE_PATH 前缀）
+scripts/og/               # OG 分享图源文件 + 定尺寸截图脚本（见 og.html 顶部说明）
 .github/workflows/deploy.yml
 ```
 
