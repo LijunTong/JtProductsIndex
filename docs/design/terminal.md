@@ -138,6 +138,8 @@
 - 首页概述句与 README 项目清单都改成生成：`describeIndex`、`npm run readme`（`--check` 供 CI）。
 - 新增 `npm run new -- <slug>`（骨架 JSON + 截图目录）与 `npm run shots`（构建 → 临时静态服务 → CDP 全路由截图，破图/横向滚动退出码 1）。
 - 删掉死字段 `tone` / `preview`；`kindLabel`/`statusLabel` 由查表派生。
+- 详情页的「获取」这一段有三种形态，用同一套 `.cmd` / `.steps` 样式：插件写 `install`（标题「安装」、提示「在插件管理器里执行」）、有安装包列 `downloads`（「下载」）、只给仓库的写 `install` 但不发安装包（「获取」、提示「在终端里执行」，例如发布台 `git clone` + `npm start`）。
+- `statusLabel` 多一个 `downloadable` 参数：可用的非插件项目没有安装包时说「可获取」，不再一律写「可下载」。
 
 **验证**
 - `npm run check` 26 文件 0 error；`npm run build` 5 页；`BASE_PATH=/JtProductsIndex npm run build` 后 `npm run check:links` 73 个链接全部有效；`npm run readme -- --check` 通过。

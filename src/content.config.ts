@@ -78,8 +78,11 @@ const projects = defineCollection({
       if (value.kind === 'plugin' && !value.install) {
         ctx.addIssue({ code: 'custom', message: 'kind 是 plugin 时必须写 install（安装命令与步骤）' })
       }
-      if (value.kind !== 'plugin' && !value.downloads && !value.cta) {
-        ctx.addIssue({ code: 'custom', message: '非插件项目至少要写 downloads 或 cta，否则详情页没有入口' })
+      if (value.kind !== 'plugin' && !value.downloads && !value.cta && !value.install) {
+        ctx.addIssue({
+          code: 'custom',
+          message: '非插件项目至少要写 downloads、install 或 cta 之一，否则详情页没有入口',
+        })
       }
     }),
 })

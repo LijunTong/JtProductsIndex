@@ -32,10 +32,15 @@ export const STATUS_LABELS: Record<ProjectStatus, string> = {
   archived: '已归档',
 }
 
-/** 可安装的项目说「可安装」，其余说「可下载」 */
-export function statusLabel(kind: ProjectKind, status: ProjectStatus): string {
+/** 可安装的项目说「可安装」，有安装包的「可下载」，只给仓库地址的「可获取」 */
+export function statusLabel(
+  kind: ProjectKind,
+  status: ProjectStatus,
+  options: { downloadable?: boolean } = {},
+): string {
   if (status !== 'available') return STATUS_LABELS[status]
-  return kind === 'plugin' ? '可安装' : '可下载'
+  if (kind === 'plugin') return '可安装'
+  return options.downloadable === false ? '可获取' : '可下载'
 }
 
 export interface Shot {

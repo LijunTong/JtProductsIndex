@@ -25,7 +25,9 @@ const products: Product[] = (await getCollection('projects'))
       kind: data.kind,
       kindLabel: KIND_LABELS[data.kind],
       status: data.status,
-      statusLabel: statusLabel(data.kind, data.status),
+      statusLabel: statusLabel(data.kind, data.status, {
+        downloadable: (data.downloads ?? []).length > 0,
+      }),
       year: data.year,
       tagline: data.tagline,
       summary: data.summary,

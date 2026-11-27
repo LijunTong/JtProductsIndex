@@ -17,7 +17,32 @@ interface Props {
 const { product } = Astro.props
 const others = products.filter((p) => p.slug !== product.slug)
 const isPlugin = product.kind === 'plugin'
+const hasDownloads = product.downloads.length > 0
 const [cover, ...gallery] = product.shots
+
+/** 获取这一段有三种形态：插件装进 DSH、有安装包列下载、只给仓库地址自己跑。 */
+const obtain = product.install
+  ? {
+      command: isPlugin ? 'install' : 'get started',
+      title: isPlugin ? '安装' : '获取',
+      description: isPlugin
+        ? '装进 DeepSeek Harness，不需要额外配置。'
+        : '从仓库拿源码，在本机跑起来；没有安装包，也不用装依赖。',
+      hint: isPlugin ? '在插件管理器里执行' : '在终端里执行',
+    }
+  : hasDownloads
+    ? {
+        command: 'ls releases/',
+        title: '下载',
+        description: '安装包都在 GitHub Releases，点开即下载。',
+        hint: '',
+      }
+    : {
+        command: 'cat obtain.md',
+        title: '获取',
+        description: '没有现成的安装包，从仓库取。',
+        hint: '',
+      }
 
 /** 安装命令按 token 上色：命令名绿、参数名暗、参数值琥珀。 */
 type CommandPart = { kind: 'text'; text: string; cls: string } | { kind: 'pair'; key: string; value: string }
@@ -102,11 +127,7 @@ const jsonLd = {
     </section>
 
     <section class="wrap section">
-      <SectionHeading
-        command={product.install ? 'install' : 'ls releases/'}
-        title={product.install ? '安装' : '下载'}
-        description={product.install ? '装进 DeepSeek Harness，不需要额外配置。' : '安装包都在 GitHub Releases，点开即下载。'}
-      />
+      <SectionHeading command={obtain.command} title={obtain.title} description={obtain.description} />
 
       {product.install ? (
         <div class="install">
@@ -130,7 +151,7 @@ const jsonLd = {
             </div>
             <div class="cmd-bar">
               <button class="copy" type="button" data-copy={product.install.command}>copy</button>
-              <span class="hint">在插件管理器里执行</span>
+              <span class="hint">{obtain.hint}</span>
               <a class="btn" href={product.repo} rel="noopener" target="_blank">源码 ↗</a>
             </div>
           </div>
@@ -141,8 +162,22 @@ const jsonLd = {
             ))}
           </ol>
         </div>
-      ) : (
+      ) : hasDownloads ? (
         <DownloadTable downloads={product.downloads} releases={product.releases} />
+      ) : (
+        <div class="install">
+          <p class="install-note">
+            这个项目没有发布安装包，源码与说明在仓库里。{product.cta ? product.cta.label + '。' : ''}
+          </p>
+          <div class="cmd-bar">
+            {product.cta && (
+              <a class="btn btn--solid" href={product.cta.href} rel="noopener" target="_blank">
+                {product.cta.label} ↗
+              </a>
+            )}
+            <a class="btn" href={product.repo} rel="noopener" target="_blank">源码 ↗</a>
+          </div>
+        </div>
       )}
     </section>
 

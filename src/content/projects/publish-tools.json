@@ -1,0 +1,149 @@
+{
+  "order": 40,
+  "name": "发布台",
+  "englishName": "Publish Tools",
+  "kind": "web",
+  "status": "available",
+  "year": 2026,
+  "tagline": "选项目、勾平台、点开始——发布不用记命令。",
+  "readme": "本地发布台：打包一次，发到 DSH 插件市场 / npm / GitHub Release",
+  "summary": "把项目发到各个平台的本地工具：选项目 → 勾平台 → 点开始。打包和发布是分开的两件事——打包按语言档案跑命令、写下一份清单，各平台再从清单里取文件上传，所以打包一次能发多个平台，某个平台失败重试也不用重新打包。全程只在本机 127.0.0.1 上跑。",
+  "platforms": [
+    "Windows",
+    "macOS / Linux"
+  ],
+  "version": "0.1.0",
+  "repo": "https://github.com/LijunTong/publish-tools",
+  "metrics": [
+    {
+      "value": "10",
+      "label": "种语言档案：Node / .NET / Java / Python / Rust / Go / PHP / Ruby / C++"
+    },
+    {
+      "value": "3",
+      "label": "个发布平台：DSH 插件市场、npm、GitHub Release"
+    },
+    {
+      "value": "0",
+      "label": "个第三方依赖，Node 20+ 直接跑"
+    }
+  ],
+  "features": [
+    {
+      "title": "打包与发布分开",
+      "body": "打包只负责把项目变成文件并写下清单，各平台再从清单取文件上传；打包一次发多个平台，某个平台失败重试时不用重新打包。",
+      "tag": "核心"
+    },
+    {
+      "title": "卡片跟着版本号变",
+      "body": "选「补丁 / 次版本 / 主版本」后，打包卡的版本、发布说明标题与 tag、产物文件名（{version}）一起按新版本预览；手改过的说明不会被覆盖。",
+      "tag": "核心"
+    },
+    {
+      "title": "时间线按平台分组",
+      "body": "步骤按平台分组，某个平台失败只影响它自己那组，其他平台照跑；排除故障后点「重试没成功的」接着做，不用从头再来。",
+      "tag": "核心"
+    },
+    {
+      "title": "失败按平台回滚",
+      "body": "打了哪个 tag、推了哪条分支、建了哪个 Release 都有记录：能自动撤的给按钮，撤不回来的（比如 npm publish）只把命令写清楚，不替你按。"
+    },
+    {
+      "title": "打包完先挑产物",
+      "body": "勾了排队平台时，打包跑完会停下来让你挑这次要上传的文件，默认全选当前版本；一个都不勾就只发源码。"
+    },
+    {
+      "title": "语言规则在界面里改",
+      "body": "识别规则、版本号来源、打包命令、产物 glob 都能直接改，也能新建一种语言；改完立刻生效，内置档案可以一键恢复默认。"
+    },
+    {
+      "title": "凭据不用粘进页面",
+      "body": "GitHub 依次找 GITHUB_TOKEN、GH_TOKEN、gh auth token、git credential；npm 用 npm whoami 判断有没有登录，顶部胶囊直接显示就绪状态。"
+    }
+  ],
+  "shots": [
+    {
+      "file": "overview.png",
+      "alt": "发布台主界面：左侧项目列表，右侧打包与各发布平台的卡片",
+      "caption": "左边选项目，右边一排卡片：打包在最上面，下面是各发布平台"
+    },
+    {
+      "file": "version-preview.png",
+      "alt": "选完版本号档位后，各卡片按新版本重新预览发布说明标题、tag 与产物文件名",
+      "caption": "选完版本号，下面每张卡按这次的版本重新预览"
+    },
+    {
+      "file": "run-timeline.png",
+      "alt": "发布运行视图：步骤按平台分组，每组显示等待、进行中、完成或失败",
+      "caption": "运行时间线按平台分组，哪个平台失败一眼看到"
+    },
+    {
+      "file": "languages.png",
+      "alt": "语言档案编辑器：识别规则、版本号来源、打包命令与产物 glob 四栏",
+      "caption": "语言档案：识别规则、版本号、打包命令、产物 glob 都能改"
+    },
+    {
+      "file": "add-project.png",
+      "alt": "打开项目对话框：在页面里逐级点进目录选择项目，子目录是项目会标出来",
+      "caption": "打开项目走页面里的目录浏览器，子目录是项目会标出来"
+    },
+    {
+      "file": "script.png",
+      "alt": "项目专用打包脚本编辑器：下面实时算出会跑哪些命令、产物落在哪",
+      "caption": "某个项目的打包命令不一样？给它写一个专用脚本"
+    },
+    {
+      "file": "rollback.png",
+      "alt": "发布失败后的回滚视图：能自动撤的平台给出按钮，撤不回来的写明命令",
+      "caption": "失败之后按平台回滚，撤不回来的只给命令"
+    },
+    {
+      "file": "pick-assets.png",
+      "alt": "选择打包产物：默认全选当前版本的产物，可以逐项勾选",
+      "caption": "打包完先停下来挑要上传的文件"
+    },
+    {
+      "file": "market-card.png",
+      "alt": "DSH 插件市场卡片：中文描述必填，没走宿主准入时自动写明风险",
+      "caption": "投市场那张卡：中文描述必填，准入情况会自动写上"
+    }
+  ],
+  "stack": [
+    {
+      "label": "运行时",
+      "items": [
+        "Node.js 20+",
+        "零第三方依赖"
+      ]
+    },
+    {
+      "label": "界面",
+      "items": [
+        "原生 HTML / CSS / JS",
+        "SSE 推进度"
+      ]
+    },
+    {
+      "label": "执行",
+      "items": [
+        "本机 git / npm",
+        "数据在 .data/"
+      ]
+    }
+  ],
+  "install": {
+    "note": "没有安装包：把仓库拿下来，双击 start.cmd（或 npm start），浏览器会自己打开。默认端口被占用会自动换一个。",
+    "command": "git clone https://github.com/LijunTong/publish-tools.git",
+    "steps": [
+      "进入目录，双击 start.cmd（macOS / Linux 用 npm start）",
+      "浏览器自动打开 http://127.0.0.1:5180",
+      "点左上「打开项目」把要发布的目录加进来，勾平台，开始发布"
+    ]
+  },
+  "requirements": [
+    "Node.js 20 及以上（零第三方依赖，不需要 npm install）",
+    "需要本机 git；发 npm 要先在终端 npm login，发 GitHub Release 需要有可用的 token",
+    "GitHub token 依次从 GITHUB_TOKEN、GH_TOKEN、gh auth token、git credential 里找"
+  ],
+  "dataNote": "发布记录、运行日志和语言档案都在仓库的 .data/ 目录里：不写进被发布的仓库，也不经过任何服务器。凭据只从本机环境变量和 git 配置里读，不落盘。"
+}
