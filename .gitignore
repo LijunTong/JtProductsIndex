@@ -11,3 +11,7 @@ Thumbs.db
 *.local
 .preview/
 .claude
+.impeccable/shots/
+
+# 构建期生成（URL 前缀随 BASE_PATH 变化，不入库）
+src/styles/fonts.css

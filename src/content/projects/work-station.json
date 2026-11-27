@@ -1,0 +1,137 @@
+{
+  "order": 10,
+  "name": "工作台",
+  "englishName": "Work Station",
+  "kind": "desktop",
+  "status": "available",
+  "year": 2026,
+  "tagline": "把手上的项目和任务，放进一个能一眼看清的看板。",
+  "readme": "跨平台桌面任务 / 项目管理器",
+  "summary": "跨平台的桌面任务管理器。看板拖拽、仪表盘汇总、逾期提醒，全部写进本机 SQLite —— 没有注册，没有同步，没有隐藏的服务器。",
+  "platforms": [
+    "Windows 10/11",
+    "Linux"
+  ],
+  "version": "1.0.2",
+  "repo": "https://github.com/LijunTong/work-station",
+  "releases": "https://github.com/LijunTong/work-station/releases/latest",
+  "metrics": [
+    {
+      "value": "4",
+      "label": "列看板：待办、进行中、已阻塞、已完成"
+    },
+    {
+      "value": "3",
+      "label": "档周期视图：今日、本周、本月"
+    },
+    {
+      "value": "SQLite",
+      "label": "单文件保存全部数据"
+    }
+  ],
+  "features": [
+    {
+      "title": "看板视图",
+      "body": "按状态横向铺开所有任务，拖一下即可改变状态；逾期任务自动标红，并给出最早逾期日期。",
+      "tag": "核心"
+    },
+    {
+      "title": "仪表盘汇总",
+      "body": "今日、本周、本月的完成率与到期数量集中在一屏，附 7 天到期趋势和状态、优先级分布。"
+    },
+    {
+      "title": "项目与分组",
+      "body": "任务可以归属到项目，项目进度按完成比例展示；看板还能在「任务看板」和「项目看板」之间切换。"
+    },
+    {
+      "title": "提醒与托盘",
+      "body": "给任务设置提醒时间，到点由系统通知推送；关掉主窗口后常驻托盘，提醒不会漏。"
+    },
+    {
+      "title": "命令面板",
+      "body": "一组快捷键唤起命令面板，搜索任务或直接跳到某个视图，双手不用离开键盘。"
+    },
+    {
+      "title": "主题与配色",
+      "body": "浅色、深色，或自己挑一组强调色；主题切换即时生效，对话框也会跟着变。"
+    }
+  ],
+  "shots": [
+    {
+      "file": "board-light.png",
+      "alt": "工作台的浅色看板界面：待办、进行中、已阻塞、已完成四列任务卡，顶部显示逾期数量。",
+      "caption": "看板：四列流转，逾期标红"
+    },
+    {
+      "file": "dashboard.png",
+      "alt": "工作台仪表盘：今日、本周、本月的完成率圆环，需要立刻处理提示，今日任务清单与项目进度。",
+      "caption": "仪表盘：完成率、逾期与项目进度"
+    },
+    {
+      "file": "tasks.png",
+      "alt": "工作台的任务列表，按截止时间排列，显示优先级、所属项目和状态。",
+      "caption": "任务列表：所有待办按截止时间排开"
+    },
+    {
+      "file": "reminders.png",
+      "alt": "工作台的提醒列表，显示每条任务的下次提醒时间与开关。",
+      "caption": "提醒：到点推系统通知"
+    },
+    {
+      "file": "command-palette.png",
+      "alt": "工作台的命令面板浮层，可搜索任务或视图，右侧列出快捷键。",
+      "caption": "命令面板：键盘直达"
+    },
+    {
+      "file": "custom-theme.png",
+      "alt": "工作台的自定义主题对话框，可选择强调色并实时预览界面配色。",
+      "caption": "主题：浅色、深色与自定义强调色"
+    }
+  ],
+  "stack": [
+    {
+      "label": "运行时",
+      "items": [
+        ".NET 10"
+      ]
+    },
+    {
+      "label": "界面",
+      "items": [
+        "Avalonia",
+        "SukiUI"
+      ]
+    },
+    {
+      "label": "存储",
+      "items": [
+        "SQLite（本机）"
+      ]
+    }
+  ],
+  "downloads": [
+    {
+      "file": "WorkStation-Setup-1.0.2.exe",
+      "size": "约 45 MB",
+      "label": "Windows 安装包",
+      "href": "https://github.com/LijunTong/work-station/releases/latest"
+    },
+    {
+      "file": "workstation_1.0.2_amd64.deb",
+      "size": "",
+      "label": "Linux（Debian / Ubuntu）",
+      "href": "https://github.com/LijunTong/work-station/releases/latest"
+    },
+    {
+      "file": "workstation-1.0.2-linux-x86_64.tar.gz",
+      "size": "",
+      "label": "Linux（通用压缩包）",
+      "href": "https://github.com/LijunTong/work-station/releases/latest"
+    }
+  ],
+  "requirements": [
+    "Windows 10 1809 及以上，或主流 Linux 发行版",
+    "首次启动会自动创建本地数据库，无需额外配置"
+  ],
+  "dataNote": "数据默认保存在本机用户目录下的 SQLite 文件里；换机器需要自己拷贝，程序不会上传到任何服务器。"
+}

@@ -130,8 +130,22 @@
 - 源文件在 `scripts/og/og.html`（不是构建产物，是静态图源），用 `scripts/og/shot-og.mjs` 定尺寸截图重生成；字体引用 `/JtProductsIndex/fonts/*.woff2`，所以必须经本地静态服务打开，`file://` 直接开会掉字体。
 - 产品页仍用自己的首图截图当 `og:image`（`ProductLayout.astro` 传 `ogImage`），只有首页和 404 用这张；新增 `og:image:alt` / `twitter:image:alt`。
 
+**内容流水线（2026-11-27）**
+- 内容源从「一个大 `products.ts`」改成 Astro content collections：`src/content.config.ts`（`glob` loader + `astro/zod` schema）定义字段与交叉校验，一个项目一份 `src/content/projects/<slug>.json`，文件名就是 slug。
+- `src/lib/product.ts` 收口类型、`KIND_LABELS`/`STATUS_LABELS` 查表、`describeIndex`、`resolveShots`（`import.meta.glob` + 缺图/大小写报错、未被引用的图 warning）。
+- `src/data/products.ts` 退化成适配器（读集合 → 解析截图 → 按 `order` 排序），页面 import 路径不变；组件类型改从 `lib/product` 引。
+- `DownloadTable` 不再 `note.split(' · ')` 猜文件名与大小，直接用 `downloads[].file/.size`（`size` 空则显示 `—`）。
+- 首页概述句与 README 项目清单都改成生成：`describeIndex`、`npm run readme`（`--check` 供 CI）。
+- 新增 `npm run new -- <slug>`（骨架 JSON + 截图目录）与 `npm run shots`（构建 → 临时静态服务 → CDP 全路由截图，破图/横向滚动退出码 1）。
+- 删掉死字段 `tone` / `preview`；`kindLabel`/`statusLabel` 由查表派生。
+
 **验证**
-- `npm run check` 23 文件 0 error；`npm run build` 5 页；`BASE_PATH=/JtProductsIndex npm run build` 后 `npm run check:links` 73 个链接全部有效。
+- `npm run check` 26 文件 0 error；`npm run build` 5 页；`BASE_PATH=/JtProductsIndex npm run build` 后 `npm run check:links` 73 个链接全部有效；`npm run readme -- --check` 通过。
+- 重构前后产物对比：404/工作台/几件事/分支切换 4 页 HTML 归一化哈希后逐字节一致；只有首页那一段概述句按设计变了；产品页 CSS 差异仅 `.install` 的 `min-width:0` 与窄屏命令折行。
+- 负例：截图文件名写错 / 大小写不匹配 / 插件缺 `install` / 缺 `dataNote` 四种都按预期中断构建并指出文件与字段。
+- 演练：`npm run new -- demo-walkthrough` → 建 JSON 与截图目录 → 首次构建报缺图 → 放图后生成 `/demo-walkthrough/` 页面 → `npm run readme` 变 4 个项目 → 删除后回到 3 个项目。
+- 全页截图不能只靠 `Page.captureScreenshot{captureBeyondViewport:true}`：很长的页面上，视口之外还没光栅化的图会被拍成整块黑。改成先逐屏滚动 + 对所有 `img` 等 `decode()`，再把视口高度撑到整页高度、`captureBeyondViewport:false` 截图。
+- `npm run shots` 覆盖 4 个路由（首页 + 3 个产品页）× 深色 × 1440/390，再加首页浅色两档，共 10 张，`broken: []`；首次跑出 `/git-branch-tool/` 390 横向滚动 492px（`.install` 网格被命令行的 min-content 撑开），已修。
 - 按 CI 形态在 `/tmp/site/JtProductsIndex` 起静态服务截图核对，覆盖首页/工作台/几件事/分支切换/404 的深色与浅色、1440 与 390，`broken: []`。
 
 ## 十、硬红线（写代码时不许破）
@@ -148,3 +162,5 @@
 - 没有骨架屏/空态：站点没有异步数据，唯一异步的是灯箱图片，已在既有实现里处理。
 - 进场动效只有光标闪烁这一处编排；滚动入场、渐显全部没有做（也不打算做）。
 - 站点还没有 dark/light 的「跟随系统」默认值以外的偏好迁移逻辑：旧键 `jt-theme` 已废弃，不做兼容。
+- 内容里没有「草稿」状态：未完成的项目只能先不进 `src/content/projects/`，或把 `status` 设成 `beta`。
+- `npm run shots` 依赖本机 Chrome；CI 里没有跑它（只在本地当验收）。

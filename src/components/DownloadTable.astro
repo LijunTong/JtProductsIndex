@@ -1,5 +1,5 @@
 ---
-import type { Download } from '../data/products'
+import type { Download } from '../lib/product'
 
 interface Props {
   downloads: Download[]
@@ -7,11 +7,6 @@ interface Props {
 }
 
 const { downloads, releases } = Astro.props
-
-const rows = downloads.map((item) => {
-  const [file, ...rest] = item.note.split(' · ')
-  return { ...item, file, size: rest.join(' · ') }
-})
 ---
 
 <div class="dl">
@@ -22,7 +17,7 @@ const rows = downloads.map((item) => {
     <span></span>
   </div>
 
-  {rows.map((row, index) => (
+  {downloads.map((row, index) => (
     <div class="dl-row">
       <span class="file">{row.file}</span>
       <span class="label">{row.label}</span>

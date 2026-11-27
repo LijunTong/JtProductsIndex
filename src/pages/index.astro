@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro'
 import Plate from '../components/Plate.astro'
 import { products } from '../data/products'
+import { describeIndex } from '../lib/product'
 import { withBase } from '../lib/url'
 
 const origin = Astro.site ?? new URL('https://lijuntong.github.io')
@@ -70,7 +71,7 @@ const pad = (value: number) => String(value).padStart(2, '0')
       </h1>
 
       <p class="sub">
-        三个本地优先的项目：两个桌面应用，一个给 DeepSeek Harness 的分支控件。
+        {describeIndex(products)}，都是本地优先的。
         界面、功能、下载入口都在这里 —— 没有账号，也没有统计脚本。
       </p>
 

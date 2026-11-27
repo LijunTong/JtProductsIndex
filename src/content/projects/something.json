@@ -1,0 +1,125 @@
+{
+  "order": 20,
+  "name": "几件事",
+  "englishName": "Something",
+  "kind": "desktop",
+  "status": "available",
+  "year": 2026,
+  "tagline": "天气、待办、日程、邮件和专注计时，装进一个窗口。",
+  "readme": "Windows 桌面的天气、待办、日程、邮件聚合器",
+  "summary": "Windows 桌面上的日常面板。左侧切换天气、日程、待办、番茄钟、信息流和邮件，右侧始终是今天最该看的东西。数据落在本机 SQLite，账号只在你配置邮箱时出现。",
+  "platforms": [
+    "Windows 10/11"
+  ],
+  "version": "1.0.3",
+  "repo": "https://github.com/LijunTong/Something",
+  "releases": "https://github.com/LijunTong/Something/releases/latest",
+  "metrics": [
+    {
+      "value": "5",
+      "label": "个日常模块：天气、日程、待办、专注、信息流"
+    },
+    {
+      "value": "本机",
+      "label": "SQLite 保存待办、日程与邮件缓存"
+    },
+    {
+      "value": "MCP",
+      "label": "本机 Agent 可把计划写成待办"
+    }
+  ],
+  "features": [
+    {
+      "title": "天气",
+      "body": "多城市切换、当前体感与湿度风速，再往后是未来几小时的逐时预报；结果缓存在本地。"
+    },
+    {
+      "title": "今日待办",
+      "body": "按截止时间排开今天的任务，标出优先级与逾期项；完成一项就少一项，数字当场更新。"
+    },
+    {
+      "title": "日程时间轴",
+      "body": "把当天的会议与约定按时间轴列出，每条可设提前提醒，到点由通知提醒你。"
+    },
+    {
+      "title": "邮件收件箱",
+      "body": "通过 IMAP 读取收件箱，按文件夹浏览、搜索并阅读正文；邮件缓存在本机，不经过第三方。"
+    },
+    {
+      "title": "番茄钟与信息流",
+      "body": "25 分钟专注计时配当日目标，旁边是订阅的信息流，工作间隙顺手扫一眼。"
+    },
+    {
+      "title": "Agent 接入（MCP）",
+      "body": "开启后在本机 127.0.0.1 提供 MCP 服务，AI 助手可以把一份项目计划直接写成清单和子任务。",
+      "tag": "进阶"
+    }
+  ],
+  "shots": [
+    {
+      "file": "dashboard.png",
+      "alt": "几件事仪表盘：左侧导航，右侧依次是天气卡片、今日日程、今日待办和番茄钟。",
+      "caption": "仪表盘：一屏看完今天"
+    },
+    {
+      "file": "weather.png",
+      "alt": "几件事的天气页：城市标签、当前温度与天气图标、湿度风速降水，下方是逐时预报。",
+      "caption": "天气：多城市与逐时预报"
+    },
+    {
+      "file": "todo.png",
+      "alt": "几件事的待办页：任务带着截止时间和优先级标签，可直接勾选完成。",
+      "caption": "待办：截止时间与优先级"
+    },
+    {
+      "file": "schedule.png",
+      "alt": "几件事的日程页：按时间轴排列当天的日程，每条显示时间、时长与提前提醒。",
+      "caption": "日程：时间轴与提前提醒"
+    },
+    {
+      "file": "mail.png",
+      "alt": "几件事的邮件页：左侧统一收件箱与文件夹，右侧邮件列表显示发件人、主题与摘要。",
+      "caption": "邮件：本机 IMAP 收件箱"
+    },
+    {
+      "file": "mcp.png",
+      "alt": "几件事的设置页 Agent 接入面板：MCP 服务开关、本机端口 3939、访问令牌与客户端配置片段。",
+      "caption": "MCP：把计划写成待办"
+    }
+  ],
+  "stack": [
+    {
+      "label": "运行时",
+      "items": [
+        "Electron",
+        "Node.js"
+      ]
+    },
+    {
+      "label": "界面",
+      "items": [
+        "Vue 3",
+        "Naive UI"
+      ]
+    },
+    {
+      "label": "存储",
+      "items": [
+        "SQLite（better-sqlite3）"
+      ]
+    }
+  ],
+  "downloads": [
+    {
+      "file": "Something-Setup-1.0.3.exe",
+      "size": "约 99 MB",
+      "label": "Windows 安装包",
+      "href": "https://github.com/LijunTong/Something/releases/latest"
+    }
+  ],
+  "requirements": [
+    "Windows 10/11",
+    "邮件功能需要你自己的 IMAP 账号（可选）"
+  ],
+  "dataNote": "待办、日程、邮件缓存都存在本机 SQLite；卸载时默认保留数据目录，重装后可以直接接着用。"
+}

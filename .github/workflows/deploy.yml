@@ -35,6 +35,9 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: README 项目清单
+        run: npm run readme -- --check
+
       - name: Check internal links
         run: npm run check:links
 

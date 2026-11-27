@@ -7,7 +7,8 @@ import ShotGallery from '../components/ShotGallery.astro'
 import DownloadTable from '../components/DownloadTable.astro'
 import StackList from '../components/StackList.astro'
 import { withBase } from '../lib/url'
-import { products, type Product } from '../data/products'
+import { products } from '../data/products'
+import type { Product } from '../lib/product'
 
 interface Props {
   product: Product
@@ -369,8 +370,13 @@ const jsonLd = {
 
   .install {
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     gap: 16px;
     margin-top: 16px;
+  }
+
+  .install > * {
+    min-width: 0;
   }
 
   .install-note {
@@ -588,6 +594,14 @@ const jsonLd = {
 
   .next a:hover {
     color: var(--green);
+  }
+
+  @media (max-width: 640px) {
+    /* 窄屏上让命令自然折行，比横向滚动更好读；copy 复制的仍是完整命令 */
+    .cmd-body {
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
   }
 
   @media (min-width: 760px) {

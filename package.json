@@ -14,7 +14,10 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
-    "check:links": "node scripts/check-links.mjs"
+    "check:links": "node scripts/check-links.mjs",
+    "readme": "node scripts/gen-readme.mjs",
+    "new": "node scripts/new-project.mjs",
+    "shots": "node scripts/shoot.mjs"
   },
   "dependencies": {
     "astro": "^7.4.13"
