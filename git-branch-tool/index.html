@@ -1,0 +1,117 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>分支切换 Git Branch · JT 出品</title><meta name="description" content="给 DeepSeek Harness 写的一个分支控件。输入框旁边放着分支图标和当前分支名，点开就能看到本地与远程分支、和上游的差距，直接切换或新建；工作目录还不是仓库时，同一个面板里就能初始化。"><link rel="canonical" href="https://lijuntong.github.io/JtProductsIndex/git-branch-tool/"><link rel="icon" href="/JtProductsIndex/favicon.svg" type="image/svg+xml"><meta name="theme-color" content="#08090A"><meta name="color-scheme" content="dark light"><meta property="og:type" content="article"><meta property="og:site_name" content="JT 出品"><meta property="og:title" content="分支切换 Git Branch · JT 出品"><meta property="og:description" content="给 DeepSeek Harness 写的一个分支控件。输入框旁边放着分支图标和当前分支名，点开就能看到本地与远程分支、和上游的差距，直接切换或新建；工作目录还不是仓库时，同一个面板里就能初始化。"><meta property="og:url" content="https://lijuntong.github.io/JtProductsIndex/git-branch-tool/"><meta property="og:image" content="https://lijuntong.github.io/JtProductsIndex/_astro/branch-panel.4aBTHnfx.png"><meta property="og:image:alt" content="分支切换 Git Branch · JT 出品"><meta property="og:locale" content="zh_CN"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="分支切换 Git Branch · JT 出品"><meta name="twitter:description" content="给 DeepSeek Harness 写的一个分支控件。输入框旁边放着分支图标和当前分支名，点开就能看到本地与远程分支、和上游的差距，直接切换或新建；工作目录还不是仓库时，同一个面板里就能初始化。"><meta name="twitter:image" content="https://lijuntong.github.io/JtProductsIndex/_astro/branch-panel.4aBTHnfx.png"><meta name="twitter:image:alt" content="分支切换 Git Branch · JT 出品"><script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"分支切换（Git Branch）","applicationCategory":"ProductivityApplication","operatingSystem":"Windows, macOS, Linux","softwareVersion":"1.0.0","description":"给 DeepSeek Harness 写的一个分支控件。输入框旁边放着分支图标和当前分支名，点开就能看到本地与远程分支、和上游的差距，直接切换或新建；工作目录还不是仓库时，同一个面板里就能初始化。","url":"https://lijuntong.github.io/JtProductsIndex/git-branch-tool/","downloadUrl":"https://github.com/LijunTong/git-branch-tool","isAccessibleForFree":true,"inLanguage":"zh-CN","author":{"@type":"Person","name":"joont","url":"https://github.com/LijunTong"},"screenshot":"https://lijuntong.github.io/JtProductsIndex/JtProductsIndex/_astro/branch-panel.4aBTHnfx.png"}</script><script>
+      ;(() => {
+        try {
+          const stored = localStorage.getItem('theme')
+          const theme = stored === 'light' || stored === 'dark' ? stored : 'dark'
+          const root = document.documentElement
+          root.dataset.theme = theme
+          root.style.colorScheme = theme
+          const meta = document.querySelector('meta[name="theme-color"]')
+          if (meta) meta.setAttribute('content', theme === 'light' ? '#F6F6F2' : '#08090A')
+        } catch {}
+      })()
+    </script><link rel="stylesheet" href="/JtProductsIndex/_astro/BaseLayout.CazkUWHM.css"><style>.plate[data-astro-cid-b3zjniq2]{min-width:0;margin:0}.plate-media[data-astro-cid-b3zjniq2]{border:1px solid var(--rule);background:var(--panel);overflow:hidden}.plate-media[data-astro-cid-b3zjniq2] img{width:100%;height:auto;display:block}.plate-media--fit[data-astro-cid-b3zjniq2]{aspect-ratio:var(--ratio,16 / 10)}.plate-media--fit[data-astro-cid-b3zjniq2] img{object-fit:cover;height:100%}.plate[data-astro-cid-b3zjniq2]:hover .plate-media[data-astro-cid-b3zjniq2]{border-color:var(--dim-2)}.meta[data-astro-cid-b3zjniq2]{color:var(--dim-2);letter-spacing:.02em;flex-wrap:wrap;align-items:baseline;gap:2px 14px;padding-top:7px;font-size:10.5px;display:flex}.f[data-astro-cid-b3zjniq2]{color:var(--amber)}.cap[data-astro-cid-b3zjniq2]{min-width:0;color:var(--dim);flex:12ch}
+</style><link rel="stylesheet" href="/JtProductsIndex/_astro/_slug_.Dpg1vDoy.css"></head><body><a class="skip-link" href="#main">跳到主要内容</a><header class="top" data-astro-cid-fzpbxy5g><div class="wrap bar" data-astro-cid-fzpbxy5g><a class="who" href="/JtProductsIndex/" aria-label="JT 出品，返回首页" data-astro-cid-fzpbxy5g><span class="host" aria-hidden="true" data-astro-cid-fzpbxy5g>jt@local:~$</span><span class="brand" data-astro-cid-fzpbxy5g>JT 出品</span></a><nav class="nav" aria-label="主导航" data-astro-cid-fzpbxy5g><a href="/JtProductsIndex/#projects" data-astro-cid-fzpbxy5g>项目</a><a href="/JtProductsIndex/#principles" data-astro-cid-fzpbxy5g>原则</a><a href="/JtProductsIndex/#about" data-astro-cid-fzpbxy5g>关于</a><a href="https://github.com/LijunTong" rel="noopener" target="_blank" data-astro-cid-fzpbxy5g>GitHub<span class="ext" aria-hidden="true" data-astro-cid-fzpbxy5g>↗</span></a></nav><div class="rt" data-astro-cid-fzpbxy5g><button class="tb" type="button" data-theme-toggle aria-pressed="true" data-astro-cid-fzpbxy5g>theme: <span data-theme-label data-astro-cid-fzpbxy5g>dark</span></button><span class="ver" aria-hidden="true" data-astro-cid-fzpbxy5g>v1.0 · 2026</span></div></div></header><script>
+  ;(() => {
+    const root = document.documentElement
+    const sync = () => {
+      const theme = root.dataset.theme === 'light' ? 'light' : 'dark'
+      document.querySelectorAll('[data-theme-toggle]').forEach((btn) => {
+        btn.setAttribute('aria-pressed', String(theme === 'dark'))
+        btn.setAttribute('aria-label', theme === 'dark' ? '当前深色，切换到浅色' : '当前浅色，切换到深色')
+      })
+      document.querySelectorAll('[data-theme-label]').forEach((el) => {
+        el.textContent = theme
+      })
+    }
+    sync()
+    document.addEventListener('click', (event) => {
+      const btn = event.target.closest('[data-theme-toggle]')
+      if (!btn) return
+      const next = root.dataset.theme === 'light' ? 'dark' : 'light'
+      root.dataset.theme = next
+      root.style.colorScheme = next
+      try {
+        localStorage.setItem('theme', next)
+      } catch {}
+      const meta = document.querySelector('meta[name="theme-color"]')
+      if (meta) meta.setAttribute('content', next === 'light' ? '#F6F6F2' : '#08090A')
+      sync()
+    })
+  })()
+</script><main id="main"><div class="page" data-astro-cid-x3ga5glf><div class="wrap" data-astro-cid-x3ga5glf><nav class="crumb" aria-label="位置" data-astro-cid-x3ga5glf><a href="/JtProductsIndex/#projects" data-astro-cid-x3ga5glf>~/products</a><span class="dim-2" data-astro-cid-x3ga5glf>/</span><span class="here" data-astro-cid-x3ga5glf>git-branch-tool</span></nav></div><section class="hero" data-astro-cid-x3ga5glf><div class="wrap hero-grid" data-astro-cid-x3ga5glf><div class="hero-main" data-astro-cid-x3ga5glf><h1 data-astro-cid-x3ga5glf>分支切换<span class="en" data-astro-cid-x3ga5glf>Git Branch</span></h1><p class="tagline" data-astro-cid-x3ga5glf>换分支不用切回终端。</p><p class="summary" data-astro-cid-x3ga5glf>给 DeepSeek Harness 写的一个分支控件。输入框旁边放着分支图标和当前分支名，点开就能看到本地与远程分支、和上游的差距，直接切换或新建；工作目录还不是仓库时，同一个面板里就能初始化。</p></div><dl class="meta-grid" data-astro-cid-x3ga5glf><div data-astro-cid-x3ga5glf><dt data-astro-cid-x3ga5glf>version</dt><dd data-astro-cid-x3ga5glf>v1.0.0</dd></div><div data-astro-cid-x3ga5glf><dt data-astro-cid-x3ga5glf>kind</dt><dd data-astro-cid-x3ga5glf>DSH 插件</dd></div><div data-astro-cid-x3ga5glf><dt data-astro-cid-x3ga5glf>platforms</dt><dd data-astro-cid-x3ga5glf>Windows · macOS · Linux</dd></div><div data-astro-cid-x3ga5glf><dt data-astro-cid-x3ga5glf>state</dt><dd class="state" data-astro-cid-x3ga5glf>可安装</dd></div></dl></div></section><section class="wrap section" data-astro-cid-x3ga5glf><header class="head" data-astro-cid-ypavld2q><h2 class="block" data-astro-cid-ypavld2q><span class="p" aria-hidden="true" data-astro-cid-ypavld2q>$</span>install</h2><p class="note" data-astro-cid-ypavld2q><span class="hash" aria-hidden="true" data-astro-cid-ypavld2q>#</span> 装进 DeepSeek Harness，不需要额外配置。</p></header><div class="install" data-astro-cid-x3ga5glf><p class="install-note" data-astro-cid-x3ga5glf>没有安装包，这是一个插件目录：由 Harness 的插件管理器链接安装。源码以 MIT 许可发布。</p><div class="cmd" data-astro-cid-x3ga5glf><div class="cmd-body" data-astro-cid-x3ga5glf><code data-astro-cid-x3ga5glf><span class="sigil" data-astro-cid-x3ga5glf>$</span><span class="p" data-astro-cid-x3ga5glf>plugin_manager</span><span data-astro-cid-x3ga5glf> </span><span class="k" data-astro-cid-x3ga5glf>action</span><span class="eq" data-astro-cid-x3ga5glf>=</span><span class="v" data-astro-cid-x3ga5glf>install_bundle</span><span data-astro-cid-x3ga5glf> </span><span class="k" data-astro-cid-x3ga5glf>target</span><span class="eq" data-astro-cid-x3ga5glf>=</span><span class="v" data-astro-cid-x3ga5glf>&lt;插件目录绝对路径&gt;</span></code></div><div class="cmd-bar" data-astro-cid-x3ga5glf><button class="copy" type="button" data-copy="plugin_manager action=install_bundle target=<插件目录绝对路径>" data-astro-cid-x3ga5glf>copy</button><span class="hint" data-astro-cid-x3ga5glf>在插件管理器里执行</span><a class="btn" href="https://github.com/LijunTong/git-branch-tool" rel="noopener" target="_blank" data-astro-cid-x3ga5glf>源码 ↗</a></div></div><ol class="steps" data-astro-cid-x3ga5glf><li data-astro-cid-x3ga5glf>把这个仓库克隆到本机任意目录</li><li data-astro-cid-x3ga5glf>在 Harness 的插件管理器里指向该目录安装（本地目录会被链接，不需要打包）</li><li data-astro-cid-x3ga5glf>装好后在设置 → Git 分支里挑选控件位置</li></ol></div></section><section class="wrap section" data-astro-cid-x3ga5glf><div class="specs" data-astro-cid-x3ga5glf><div class="spec" data-astro-cid-x3ga5glf><b data-astro-cid-x3ga5glf>5</b><span data-astro-cid-x3ga5glf>个可放置的位置：输入框工具栏、会话标题旁等</span></div><div class="spec" data-astro-cid-x3ga5glf><b data-astro-cid-x3ga5glf>5</b><span data-astro-cid-x3ga5glf>个分支动作：列出、切换、新建、初始化、删除</span></div><div class="spec" data-astro-cid-x3ga5glf><b data-astro-cid-x3ga5glf>本机</b><span data-astro-cid-x3ga5glf>所有操作调用本机 git，不走网络</span></div></div></section><section class="wrap section" data-astro-cid-x3ga5glf><header class="head" data-astro-cid-ypavld2q><h2 class="block" data-astro-cid-ypavld2q><span class="p" aria-hidden="true" data-astro-cid-ypavld2q>$</span>cat features.md</h2><p class="note" data-astro-cid-ypavld2q><span class="hash" aria-hidden="true" data-astro-cid-ypavld2q>#</span> 围绕每天真正会用到的动作组织，不把功能堆成一张清单。</p></header><div class="block" data-astro-cid-x3ga5glf><ul class="feats" data-astro-cid-5avuv2ve><li class="feat" data-astro-cid-5avuv2ve><h3 data-astro-cid-5avuv2ve><span class="plus" aria-hidden="true" data-astro-cid-5avuv2ve>+</span>分支控件<span class="tag" data-astro-cid-5avuv2ve>核心</span></h3><p data-astro-cid-5avuv2ve>输入框工具栏里一个分支图标、当前分支名和一个状态点：绿点表示工作区干净，黄点表示有未提交改动，灰点表示正在读取或当前目录不是仓库。</p></li><li class="feat" data-astro-cid-5avuv2ve><h3 data-astro-cid-5avuv2ve><span class="plus" aria-hidden="true" data-astro-cid-5avuv2ve>+</span>切换分支</h3><p data-astro-cid-5avuv2ve>本地分支排在前面，远程分支收起来并带数量；顶部有筛选框，当前分支标「当前」，行尾的 ↑N ↓N 是与上游的差距。点一下即切换，控件标签立刻刷新。</p></li><li class="feat" data-astro-cid-5avuv2ve><h3 data-astro-cid-5avuv2ve><span class="plus" aria-hidden="true" data-astro-cid-5avuv2ve>+</span>新建分支</h3><p data-astro-cid-5avuv2ve>面板底部是「分支名 + 起点 + 创建并切换」，起点下拉默认当前分支，填好名字回车就创建并切过去。</p></li><li class="feat" data-astro-cid-5avuv2ve><h3 data-astro-cid-5avuv2ve><span class="plus" aria-hidden="true" data-astro-cid-5avuv2ve>+</span>非 Git 目录也能开始</h3><p data-astro-cid-5avuv2ve>工作目录还不是仓库时，控件显示「非 Git 仓库」，面板里给一个按钮，就地执行 git init，不用先开终端。</p></li><li class="feat" data-astro-cid-5avuv2ve><h3 data-astro-cid-5avuv2ve><span class="plus" aria-hidden="true" data-astro-cid-5avuv2ve>+</span>命令与工具<span class="tag" data-astro-cid-5avuv2ve>进阶</span></h3><p data-astro-cid-5avuv2ve>除了点界面，还能用 /branch list | switch | create | init 命令，或让对话里的 Agent 调用 git_branch 工具完成同样的事。</p></li><li class="feat" data-astro-cid-5avuv2ve><h3 data-astro-cid-5avuv2ve><span class="plus" aria-hidden="true" data-astro-cid-5avuv2ve>+</span>位置随你放</h3><p data-astro-cid-5avuv2ve>控件可以挂在 5 个位置之一，在设置里改；偏好存在浏览器 localStorage 里，不写配置文件。</p></li></ul></div></section><section class="wrap section" data-astro-cid-x3ga5glf><header class="head" data-astro-cid-ypavld2q><h2 class="block" data-astro-cid-ypavld2q><span class="p" aria-hidden="true" data-astro-cid-ypavld2q>$</span>open screens/</h2><p class="note" data-astro-cid-ypavld2q><span class="hash" aria-hidden="true" data-astro-cid-ypavld2q>#</span> 点任意一张截图放大，看真实界面。</p></header><div class="block" data-astro-cid-x3ga5glf><figure class="plate" data-astro-cid-b3zjniq2><div class="plate-media plate-media--fit" style="--ratio:4 / 3" data-astro-cid-b3zjniq2><img src="/JtProductsIndex/_astro/branch-panel.4aBTHnfx_bDygk.webp" srcset="/JtProductsIndex/_astro/branch-panel.4aBTHnfx_1BqIxh.webp 640w, /JtProductsIndex/_astro/branch-panel.4aBTHnfx_Z5pz1s.webp 1024w, /JtProductsIndex/_astro/branch-panel.4aBTHnfx_bDygk.webp 1440w" alt="分支面板：顶部是筛选框，本地分支逐个列出，当前分支标「当前」，其余显示与上游的领先落后数量，底部是新建分支的输入框与起点下拉。" sizes="(min-width: 1100px) 1120px, 94vw" loading="eager" style="object-position:center" data-astro-cid-b3zjniq2="true" decoding="async" width="1440" height="1015"></div><figcaption class="meta" data-astro-cid-b3zjniq2><span class="f" data-astro-cid-b3zjniq2>branch-panel.png</span><span class="cap" data-astro-cid-b3zjniq2>面板：本地、远程与上游差距</span></figcaption></figure></div><div class="block" data-astro-cid-x3ga5glf><ul class="gallery" data-astro-cid-wgluvavq><li class="cell cell--wide" data-astro-cid-wgluvavq><button class="trigger" type="button" data-shot="/JtProductsIndex/_astro/new-branch.Yji3FyIg_1WF22x.webp" data-caption="新建：分支名 + 起点" aria-label="放大查看：新建：分支名 + 起点" data-astro-cid-wgluvavq><span class="media" data-astro-cid-wgluvavq><img src="/JtProductsIndex/_astro/new-branch.Yji3FyIg_Z1r7H4t.webp" srcset="/JtProductsIndex/_astro/new-branch.Yji3FyIg_Z1HQoeK.webp 640w, /JtProductsIndex/_astro/new-branch.Yji3FyIg_2aNYl9.webp 1024w" alt="在分支面板底部填入新分支名 feature/git-ui，从 master 起点的下拉里选择起点后点「创建并切换」。" sizes="(min-width: 1100px) 1120px, 94vw" loading="lazy" data-astro-cid-wgluvavq="true" decoding="async" width="1440" height="1178"></span><span class="meta" data-astro-cid-wgluvavq><span class="f" data-astro-cid-wgluvavq>new-branch.png</span><span class="cap" data-astro-cid-wgluvavq>新建：分支名 + 起点</span></span></button></li><li class="cell" data-astro-cid-wgluvavq><button class="trigger" type="button" data-shot="/JtProductsIndex/_astro/overview.BiiqTUsO_iyMyX.webp" data-caption="控件：当前分支就在输入框旁边" aria-label="放大查看：控件：当前分支就在输入框旁边" data-astro-cid-wgluvavq><span class="media" data-astro-cid-wgluvavq><img src="/JtProductsIndex/_astro/overview.BiiqTUsO_1cMmVf.webp" srcset="/JtProductsIndex/_astro/overview.BiiqTUsO_ZEeiFa.webp 640w, /JtProductsIndex/_astro/overview.BiiqTUsO_Z1XLEWI.webp 1024w" alt="DeepSeek Harness 的首页：输入框工具栏里是分支图标、当前分支 master 和一个绿色状态点。" sizes="(min-width: 1100px) 552px, 94vw" loading="lazy" data-astro-cid-wgluvavq="true" decoding="async" width="1440" height="921"></span><span class="meta" data-astro-cid-wgluvavq><span class="f" data-astro-cid-wgluvavq>overview.png</span><span class="cap" data-astro-cid-wgluvavq>控件：当前分支就在输入框旁边</span></span></button></li><li class="cell" data-astro-cid-wgluvavq><button class="trigger" type="button" data-shot="/JtProductsIndex/_astro/init-repo.CXnahbBM_IIVTf.webp" data-caption="非 Git 目录：一键初始化" aria-label="放大查看：非 Git 目录：一键初始化" data-astro-cid-wgluvavq><span class="media" data-astro-cid-wgluvavq><img src="/JtProductsIndex/_astro/init-repo.CXnahbBM_BcxwQ.webp" srcset="/JtProductsIndex/_astro/init-repo.CXnahbBM_Z2605lQ.webp 640w, /JtProductsIndex/_astro/init-repo.CXnahbBM_Z10dE2.webp 1024w" alt="非 Git 目录下的分支面板：显示当前目录不是 Git 仓库，并给出「在此目录创建 Git 仓库」按钮。" sizes="(min-width: 1100px) 552px, 94vw" loading="lazy" data-astro-cid-wgluvavq="true" decoding="async" width="1440" height="687"></span><span class="meta" data-astro-cid-wgluvavq><span class="f" data-astro-cid-wgluvavq>init-repo.png</span><span class="cap" data-astro-cid-wgluvavq>非 Git 目录：一键初始化</span></span></button></li></ul><dialog class="lightbox" aria-label="截图预览" aria-modal="true" data-zoom="false" data-astro-cid-wgluvavq><div class="toolbar" data-astro-cid-wgluvavq><span class="hint mono" data-astro-cid-wgluvavq>screenshot — 点击放大 · Esc 关闭</span><button class="zoom" type="button" aria-pressed="false" data-astro-cid-wgluvavq>放大</button><button class="close" type="button" aria-label="关闭预览" data-astro-cid-wgluvavq>close ✕</button></div><div class="stage" data-astro-cid-wgluvavq></div><p class="caption mono" data-astro-cid-wgluvavq></p></dialog><script>
+  ;(() => {
+    const dialog = document.querySelector('.lightbox')
+    if (!dialog) return
+    const stage = dialog.querySelector('.stage')
+    const caption = dialog.querySelector('.caption')
+    const close = dialog.querySelector('.close')
+    const zoom = dialog.querySelector('.zoom')
+    if (!stage || !caption || !close || !zoom) return
+
+    const resetZoom = () => {
+      dialog.dataset.zoom = 'false'
+      zoom.setAttribute('aria-pressed', 'false')
+      zoom.textContent = '放大'
+      stage.scrollTo(0, 0)
+    }
+
+    document.querySelectorAll('[data-shot]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const image = document.createElement('img')
+        image.className = 'zoom-image'
+        image.src = btn.dataset.shot
+        image.alt = btn.querySelector('img')?.alt ?? ''
+        stage.replaceChildren(image)
+        caption.textContent = btn.dataset.caption ?? ''
+        resetZoom()
+        dialog.showModal()
+        close.focus()
+      })
+    })
+
+    zoom.addEventListener('click', () => {
+      const isZoomed = dialog.dataset.zoom !== 'true'
+      dialog.dataset.zoom = String(isZoomed)
+      zoom.setAttribute('aria-pressed', String(isZoomed))
+      zoom.textContent = isZoomed ? '适应' : '放大'
+      stage.scrollTo(0, 0)
+    })
+
+    close.addEventListener('click', () => dialog.close())
+    dialog.addEventListener('click', (event) => {
+      if (event.target === dialog) dialog.close()
+    })
+    dialog.addEventListener('close', resetZoom)
+  })()
+</script></div></section><section class="wrap section" data-astro-cid-x3ga5glf><header class="head" data-astro-cid-ypavld2q><h2 class="block" data-astro-cid-ypavld2q><span class="p" aria-hidden="true" data-astro-cid-ypavld2q>$</span>cat runtime.md</h2><p class="note" data-astro-cid-ypavld2q><span class="hash" aria-hidden="true" data-astro-cid-ypavld2q>#</span> 运行环境、技术构成和数据放在哪里，都写在这里。</p></header><div class="facts" data-astro-cid-x3ga5glf><div class="fact" data-astro-cid-x3ga5glf><h3 data-astro-cid-x3ga5glf>运行环境</h3><ul data-astro-cid-x3ga5glf><li data-astro-cid-x3ga5glf>DeepSeek Harness（需要支持 Cordis 插件的版本）</li><li data-astro-cid-x3ga5glf>本机已安装 git 并在 PATH 里</li></ul></div><div class="fact" data-astro-cid-x3ga5glf><h3 data-astro-cid-x3ga5glf>你的数据</h3><p data-astro-cid-x3ga5glf>分支操作全部交给本机 git，插件只读取当前工作目录的仓库状态；没有账号，也不经过任何服务器。</p></div><div class="fact" data-astro-cid-x3ga5glf><h3 data-astro-cid-x3ga5glf>技术构成</h3><dl class="stack" data-astro-cid-k5dku353><div class="row" data-astro-cid-k5dku353><dt data-astro-cid-k5dku353>宿主</dt><dd data-astro-cid-k5dku353>DeepSeek Harness（Cordis 插件）</dd></div><div class="row" data-astro-cid-k5dku353><dt data-astro-cid-k5dku353>界面</dt><dd data-astro-cid-k5dku353>React</dd></div><div class="row" data-astro-cid-k5dku353><dt data-astro-cid-k5dku353>实现</dt><dd data-astro-cid-k5dku353>Node.js · 本机 git CLI</dd></div></dl></div></div><p class="source" data-astro-cid-x3ga5glf><span class="dim-2" data-astro-cid-x3ga5glf>src →</span><a href="https://github.com/LijunTong/git-branch-tool" rel="noopener" target="_blank" data-astro-cid-x3ga5glf>github.com/LijunTong/git-branch-tool ↗</a></p></section><nav class="wrap next" aria-label="其他项目" data-astro-cid-x3ga5glf><a href="/JtProductsIndex/#projects" data-astro-cid-x3ga5glf><span class="dim-2" data-astro-cid-x3ga5glf>←</span> 全部项目</a><div class="others" data-astro-cid-x3ga5glf><a href="/JtProductsIndex/work-station/" data-astro-cid-x3ga5glf>接着看：工作台 <span class="dim-2" data-astro-cid-x3ga5glf>→</span></a><a href="/JtProductsIndex/something/" data-astro-cid-x3ga5glf>接着看：几件事 <span class="dim-2" data-astro-cid-x3ga5glf>→</span></a><a href="/JtProductsIndex/publish-tools/" data-astro-cid-x3ga5glf>接着看：发布台 <span class="dim-2" data-astro-cid-x3ga5glf>→</span></a></div></nav></div></main><footer class="foot" data-astro-cid-nns7i3if><div class="wrap inner" data-astro-cid-nns7i3if><p class="ok" data-astro-cid-nns7i3if><span class="accent" data-astro-cid-nns7i3if>[ok]</span>4 个项目 · 25 张截图 · 无账号 · 无统计脚本</p><div class="links" data-astro-cid-nns7i3if><a href="https://github.com/LijunTong" rel="noopener" target="_blank" data-astro-cid-nns7i3if>github.com/LijunTong<span class="ext" aria-hidden="true" data-astro-cid-nns7i3if> ↗</span></a><span class="dim-2" data-astro-cid-nns7i3if>© 2026 JT 出品</span></div></div></footer></body></html><script>
+  ;(() => {
+    document.querySelectorAll('[data-copy]').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        const text = btn.dataset.copy ?? ''
+        try {
+          await navigator.clipboard.writeText(text)
+          btn.textContent = 'copied ✓'
+          btn.dataset.state = 'done'
+          setTimeout(() => {
+            btn.textContent = 'copy'
+            delete btn.dataset.state
+          }, 1600)
+        } catch {
+          const code = document.querySelector('.cmd-body code')
+          if (code) {
+            const range = document.createRange()
+            range.selectNodeContents(code)
+            const selection = window.getSelection()
+            selection?.removeAllRanges()
+            selection?.addRange(range)
+          }
+          btn.textContent = '按 Ctrl+C'
+          setTimeout(() => {
+            btn.textContent = 'copy'
+          }, 2400)
+        }
+      })
+    })
+  })()
+</script>
